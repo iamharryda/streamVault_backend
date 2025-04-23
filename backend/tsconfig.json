@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ES6",                                  // Modern JavaScript output
+    "module": "commonjs",                             // Required for Node.js
+    "rootDir": "./",                                  // Input source folder
+    "outDir": "./dist",                               // Output compiled files
+    "esModuleInterop": true,                          // Allows import x from 'y'
+    "forceConsistentCasingInFileNames": true,         // Ensures import casing is consistent
+    "strict": true,                                   // Enable strict typing
+    "skipLibCheck": true                              // Speeds up build by skipping type checks on node_modules
+  }
+}
