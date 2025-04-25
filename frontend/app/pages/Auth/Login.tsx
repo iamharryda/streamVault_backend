@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
-import { useFonts as useInterFonts, Inter_700Bold, Inter_600SemiBold } from "@expo-google-fonts/inter"; // Import Inter fonts
-import { useFonts as useDmSansFonts, DMSans_400Regular, DMSans_500Medium } from "@expo-google-fonts/dm-sans"; // Import DM Sans fonts
+import { useFonts as useInterFonts, Inter_700Bold, Inter_600SemiBold } from "@expo-google-fonts/inter"; 
+import { useFonts as useDmSansFonts, DMSans_400Regular, DMSans_500Medium } from "@expo-google-fonts/dm-sans";
+import { MaterialIcons } from "@expo/vector-icons";
+
 
 export default function Login() {
   const [interFontsLoaded] = useInterFonts({
@@ -56,12 +58,11 @@ export default function Login() {
               style={styles.checkboxRow}
               onPress={() => setKeepSignedIn(!keepSignedIn)}
             >
-              <View
-                style={[
-                  styles.checkbox,
-                  keepSignedIn && styles.checkboxChecked,
-                ]}
-              />
+              <View style={[styles.checkbox, keepSignedIn && styles.checkboxChecked]}>
+                {keepSignedIn && (
+                  <MaterialIcons name="check" size={16} color="#000" />
+                )}
+              </View>
               <Text style={styles.checkboxLabel}>Keep me signed in</Text>
             </TouchableOpacity>
 
@@ -89,9 +90,9 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1, // Ensures the background fills the screen
-    width: "100%", // Explicitly set width
-    height: "100%", // Explicitly set height
+    flex: 1, 
+    width: "100%", 
+    height: "100%",
   },
   container: {
     flex: 1,
@@ -132,9 +133,11 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     borderColor: "#C3CDCF",
     marginRight: 8,
+    justifyContent: "center",
   },
   checkboxChecked: {
-    backgroundColor: "#f2c300",
+    backgroundColor: "#FACC15",
+    borderColor: "#FACC15",
   },
   checkboxLabel: {
     color: "#C3CDCF",

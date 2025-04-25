@@ -23,7 +23,6 @@ export default function Register() {
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false);
 
   return (
-        /* Set background image */ 
     <ImageBackground
       source={require("../../assets/placeholder.png")}
       style={styles.wrapper}
@@ -31,69 +30,64 @@ export default function Register() {
     >
       <LinearGradient colors={["rgba(13, 40, 47, 0.8)", "#04191E"]} style={styles.wrapper}>
         <View style={styles.container}>
-          <Text style={styles.title}>Sign up</Text>
+          <View style={styles.content}>
+            <Text style={styles.title}>Sign up</Text>
 
-          <TextInput
-            style={styles.input}
-            placeholder="Email"
-            placeholderTextColor="#888"
-            value={email}
-            onChangeText={setEmail}
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Username"
-            placeholderTextColor="#888"
-            value={username}
-            onChangeText={setUsername}
-          />
-
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="#888"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-
-          <View style={styles.switchRow}>
-            <Switch
-              value={isTermsAccepted}
-              onValueChange={setIsTermsAccepted}
-              trackColor={{ false: "#C3CDCF", true: "#FACC154D" }}
-              thumbColor={isTermsAccepted ? "#FACC15" : "#888"}
-              {...Platform.select({web: {
-                activeThumbColor: "#FACC15"
-            }})}
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              placeholderTextColor="#888"
+              value={email}
+              onChangeText={setEmail}
             />
 
-                      {/* Set TOS routing */}
-            <Text style={styles.switchLabel}>
-              I’m 16+ years old and accept <Link href="./Register" style={styles.link}>Terms of Use</Link>
-            </Text>
-          </View>
-
-          <View style={styles.switchRow}>
-            <Switch
-              value={isPrivacyAccepted}
-              onValueChange={setIsPrivacyAccepted}
-              trackColor={{ false: "#C3CDCF", true: "#FACC154D" }}
-              thumbColor={isPrivacyAccepted ? "#FACC15" : "#888"}
-              {...Platform.select({web: {
-                activeThumbColor: "#FACC15"
-            }})}
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              placeholderTextColor="#888"
+              value={username}
+              onChangeText={setUsername}
             />
-                      {/* Set privacy policy routing */}
-            <Text style={styles.switchLabel}>
-              I agree to the <Link href="./Register" style={styles.link}>Privacy Policy</Link> and consent to the processing of my personal information
-            </Text>
-          </View>
 
-          <TouchableOpacity style={styles.signUpButton}>
-            <Text style={styles.signUpButtonText}>Sign up</Text>
-          </TouchableOpacity>
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              placeholderTextColor="#888"
+              value={password}
+              onChangeText={setPassword}
+              secureTextEntry
+            />
+
+            <View style={styles.switchRow}>
+              <Switch
+                value={isTermsAccepted}
+                onValueChange={setIsTermsAccepted}
+                trackColor={{ false: "#C3CDCF", true: "#FACC154D" }}
+                thumbColor={isTermsAccepted ? "#FACC15" : "#888"}
+                {...Platform.select({ web: { activeThumbColor: "#FACC15" } })}
+              />
+              <Text style={styles.switchLabel}>
+                I’m 16+ years old and accept <Link href="./Register" style={styles.link}>Terms of Use</Link>
+              </Text>
+            </View>
+
+            <View style={styles.switchRow}>
+              <Switch
+                value={isPrivacyAccepted}
+                onValueChange={setIsPrivacyAccepted}
+                trackColor={{ false: "#C3CDCF", true: "#FACC154D" }}
+                thumbColor={isPrivacyAccepted ? "#FACC15" : "#888"}
+                {...Platform.select({ web: { activeThumbColor: "#FACC15" } })}
+              />
+              <Text style={styles.switchLabel}>
+                I agree to the <Link href="./Register" style={styles.link}>Privacy Policy</Link> and consent to the processing of my personal information
+              </Text>
+            </View>
+
+            <TouchableOpacity style={styles.signUpButton}>
+              <Text style={styles.signUpButtonText}>Sign up</Text>
+            </TouchableOpacity>
+          </View>
 
           <View style={styles.signInRow}>
             <Text style={styles.signInText}>Already have an account? </Text>
@@ -115,14 +109,18 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: "center",
+    justifyContent: "space-between",
     paddingHorizontal: 16,
+  },
+  content: {
+    flex: 1,
+    justifyContent: "center",
   },
   title: {
     fontSize: 32,
     fontFamily: "inter_700Bold",
     color: "#fff",
-    marginTop: 72,
+    marginTop: 142,
     marginBottom: 40,
     textAlign: "center",
   },
@@ -137,7 +135,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   switchRow: {
-    flexDirection: "row-reverse", // Align switch to the right
+    flexDirection: "row-reverse",
     alignItems: "center",
     marginBottom: 20,
   },
@@ -146,8 +144,8 @@ const styles = StyleSheet.create({
     color: "#C3CDCF",
     fontSize: 14,
     fontFamily: "DMSans_400Regular",
-    marginRight: 10, // Add spacing between the switch and the text
-    textAlign: "left", // Ensure text aligns to the left
+    marginRight: 10,
+    textAlign: "left",
   },
   link: {
     color: "white",
@@ -169,7 +167,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 10,
+    marginBottom: 80,
   },
   signInText: {
     color: "#C3CDCF",
