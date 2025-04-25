@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontFamily: "inter_700Bold",
     color: "#fff",
-    marginTop: 60,
+    marginTop: 72,
     marginBottom: 40,
     textAlign: "center",
   },
