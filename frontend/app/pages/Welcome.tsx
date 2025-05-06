@@ -20,16 +20,20 @@ export default function Welcome() {
         style={styles.wrapper}
       >
         <View style={styles.bottomGroup}>
-        <Text style={styles.titleText}>Welcome To{"\n"}StreamVault</Text>
-
-          <Text style={styles.bottomText}>
-          Lorem ipsum dolor sit amet consectetur. Pellentesque vitae ac habitasse risus lobortis scelerisque maecenas varius.
-          </Text>
-
           <TouchableOpacity style={styles.button}>
-            <Link href="./pages/Welcome" style={styles.buttonText}>Get Started</Link>
+            <Link href="/pages/Auth/Login" style={styles.buttonText}>Log in</Link>
           </TouchableOpacity>
 
+          <TouchableOpacity style={styles.button}>
+          <Link href="/pages/Auth/Register" style={styles.buttonText}>Create an account</Link>
+          </TouchableOpacity>
+
+            {/* Missing logic */}
+          <Link href="./Welcome" style={styles.skipText}>SKIP & BROWSE</Link>
+
+          <Text style={styles.bottomText}>
+            Lorem ipsum dolor sit amet consectetur.{"\n"} Bibendum eu turpis diam amet mauris laoreet
+          </Text>
         </View>
       </LinearGradient>
     </ImageBackground>
@@ -46,7 +50,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
-    paddingBottom: 72,
+    paddingBottom: 24,
   },
   button: {
     backgroundColor: "#FACC15",
@@ -54,7 +58,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     width: "90%",
-    marginTop: 16,
+    marginBottom: 20,
   },
   buttonText: {
     color: "#000",
@@ -66,17 +70,14 @@ const styles = StyleSheet.create({
     fontFamily: "DMSans_400Regular",
     fontSize: 14,
     textAlign: "center",
-    marginTop: 12,
-    paddingHorizontal: 16,
-    lineHeight: 22,
-    marginBottom: -8,
-  },
-  titleText: {
-    color: "white",
-    fontFamily: "Inter_700Bold",
-    fontSize: 32,
-    textAlign: "center",
     marginTop: 16,
-    lineHeight: 40,
+    paddingHorizontal: 16,
   },
+  skipText: {
+    color: "#FACC15",
+    fontFamily: "Inter_500Medium",
+    fontSize: 14,
+    textAlign: "center",
+    marginVertical: 8,
+  }
 });
