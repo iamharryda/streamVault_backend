@@ -24,7 +24,7 @@ export default function Register() {
 
   return (
     <ImageBackground
-    source={require("../../../assets/placeholder.png")}
+    source={require("../../assets/placeholder.png")}
       style={styles.wrapper}
       resizeMode="cover"
     >

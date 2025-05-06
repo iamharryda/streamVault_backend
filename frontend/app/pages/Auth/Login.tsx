@@ -24,7 +24,7 @@ export default function Login() {
 
   return (
     /* Set background image */ 
-    <ImageBackground source={require("../../../assets/placeholder.png")} 
+    <ImageBackground source={require("../../assets/placeholder.png")} 
       style={styles.wrapper}
       resizeMode="cover" 
     >
