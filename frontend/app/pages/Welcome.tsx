@@ -3,13 +3,16 @@ import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from "react
 import { LinearGradient } from "expo-linear-gradient";
 import { useFonts as useInterFonts, Inter_700Bold, Inter_600SemiBold, Inter_500Medium } from "@expo-google-fonts/inter";
 import { useFonts as useDmSansFonts, DMSans_400Regular } from "@expo-google-fonts/dm-sans";
-import { Link } from "expo-router";
+import { useRouter } from "expo-router";
 
 export default function Welcome() {
+  const router = useRouter();
+  
   useInterFonts({ Inter_700Bold, Inter_600SemiBold, Inter_500Medium });
   useDmSansFonts({ DMSans_400Regular });
 
   return (
+    /* SET BACKGROUND IMAGE */
     <ImageBackground
       source={require("../assets/placeholder.png")}
       style={styles.wrapper}
@@ -20,16 +23,16 @@ export default function Welcome() {
         style={styles.wrapper}
       >
         <View style={styles.bottomGroup}>
-          <TouchableOpacity style={styles.button}>
-            <Link href="/pages/Auth/Login" style={styles.buttonText}>Log in</Link>
+          <TouchableOpacity style={styles.button} onPress={() => router.push("./Auth/Login")}>
+            <Text style={styles.buttonText}>Log in</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button}>
-          <Link href="/pages/Auth/Register" style={styles.buttonText}>Create an account</Link>
+          <TouchableOpacity style={styles.button} onPress={() => router.push("./Auth/Register")}>
+          <Text style={styles.buttonText}>Create an account</Text>
           </TouchableOpacity>
 
             {/* Missing logic */}
-          <Link href="./Welcome" style={styles.skipText}>SKIP & BROWSE</Link>
+          <Text style={styles.skipText} onPress={() => router.push("./Welcome")}>SKIP & BROWSE</Text>
 
           <Text style={styles.bottomText}>
             Lorem ipsum dolor sit amet consectetur.{"\n"} Bibendum eu turpis diam amet mauris laoreet

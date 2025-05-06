@@ -1,20 +1,15 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Switch, Platform } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { Link } from "expo-router";
+import { useRouter } from "expo-router";
 import { useFonts as useInterFonts, Inter_700Bold, Inter_600SemiBold } from "@expo-google-fonts/inter";
 import { useFonts as useDmSansFonts, DMSans_400Regular, DMSans_500Medium } from "@expo-google-fonts/dm-sans";
 
 export default function Register() {
-  const [interFontsLoaded] = useInterFonts({
-    Inter_700Bold,
-    Inter_600SemiBold,
-  });
+const router = useRouter();
 
-  const [dmSansFontsLoaded] = useDmSansFonts({
-    DMSans_400Regular,
-    DMSans_500Medium,
-  });
+useInterFonts({ Inter_700Bold, Inter_600SemiBold });
+useDmSansFonts({ DMSans_400Regular, DMSans_500Medium });
 
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
@@ -23,6 +18,7 @@ export default function Register() {
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false);
 
   return (
+        /* SET BACKGROUND IMAGE */
     <ImageBackground
     source={require("../../assets/placeholder.png")}
       style={styles.wrapper}
@@ -66,8 +62,10 @@ export default function Register() {
                 thumbColor={isTermsAccepted ? "#FACC15" : "#888"}
                 {...Platform.select({ web: { activeThumbColor: "#FACC15" } })}
               />
+              
+              {/* Point to privacy policy page? */}
               <Text style={styles.switchLabel}>
-                I’m 16+ years old and accept <Link href="./Register" style={styles.link}>Terms of Use</Link>
+                I’m 16+ years old and accept <Text style={styles.link} onPress={() => router.push("./Register")}>Terms of Use</Text>
               </Text>
             </View>
 
@@ -79,11 +77,13 @@ export default function Register() {
                 thumbColor={isPrivacyAccepted ? "#FACC15" : "#888"}
                 {...Platform.select({ web: { activeThumbColor: "#FACC15" } })}
               />
+              {/* Point to privacy policy page? */}
               <Text style={styles.switchLabel}>
-                I agree to the <Link href="./Register" style={styles.link}>Privacy Policy</Link> and consent to the processing of my personal information
+                I agree to the <Text style={styles.link} onPress={() => router.push("./Register")}>Privacy Policy</Text> and consent to the processing of my personal information
               </Text>
             </View>
 
+              {/* Add logic to sign up the user */}
             <TouchableOpacity style={styles.signUpButton}>
               <Text style={styles.signUpButtonText}>Sign up</Text>
             </TouchableOpacity>
@@ -91,8 +91,8 @@ export default function Register() {
 
           <View style={styles.signInRow}>
             <Text style={styles.signInText}>Already have an account? </Text>
-            <TouchableOpacity>
-              <Link style={styles.signInLink} href="./Login">Sign in</Link>
+            <TouchableOpacity onPress={() => router.push("./Login")}>
+              <Text style={styles.signInLink}>Sign in</Text>
             </TouchableOpacity>
           </View>
         </View>
