@@ -1,9 +1,10 @@
 import { Text, View } from "react-native";
+import Navbar from "../components/Navbar";
 
 export default function Index() {
   return (
-    <View>
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-    </View>
+    <View style={{ flex: 1, backgroundColor: "#04191E"  }}>
+      <View style={{ flex: 1 }}>
+      </View><Navbar/></View>
   );
 }
