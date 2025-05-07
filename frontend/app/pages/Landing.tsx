@@ -3,13 +3,16 @@ import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from "react
 import { LinearGradient } from "expo-linear-gradient";
 import { useFonts as useInterFonts, Inter_700Bold, Inter_600SemiBold, Inter_500Medium } from "@expo-google-fonts/inter";
 import { useFonts as useDmSansFonts, DMSans_400Regular } from "@expo-google-fonts/dm-sans";
-import { Link } from "expo-router";
+import { useRouter } from "expo-router";
 
 export default function Welcome() {
+  const router = useRouter();
+  
   useInterFonts({ Inter_700Bold, Inter_600SemiBold, Inter_500Medium });
   useDmSansFonts({ DMSans_400Regular });
 
   return (
+        /* SET BACKGROUND IMAGE */
     <ImageBackground
       source={require("../assets/placeholder.png")}
       style={styles.wrapper}
@@ -26,8 +29,8 @@ export default function Welcome() {
           Lorem ipsum dolor sit amet consectetur. Pellentesque vitae ac habitasse risus lobortis scelerisque maecenas varius.
           </Text>
 
-          <TouchableOpacity style={styles.button}>
-            <Link href="./pages/Welcome" style={styles.buttonText}>Get Started</Link>
+          <TouchableOpacity style={styles.button} onPress={() => router.push("./pages/Welcome")}>
+            <Text style={styles.buttonText}>Get Started</Text>
           </TouchableOpacity>
 
         </View>

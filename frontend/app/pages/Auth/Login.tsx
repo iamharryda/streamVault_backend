@@ -1,29 +1,24 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { Link } from "expo-router";
+import { useRouter } from "expo-router";
 import { useFonts as useInterFonts, Inter_700Bold, Inter_600SemiBold } from "@expo-google-fonts/inter"; 
 import { useFonts as useDmSansFonts, DMSans_400Regular, DMSans_500Medium } from "@expo-google-fonts/dm-sans";
 import { MaterialIcons } from "@expo/vector-icons";
 
 
 export default function Login() {
-  const [interFontsLoaded] = useInterFonts({
-    Inter_700Bold,
-    Inter_600SemiBold
-  });
+  const router = useRouter();
 
-  const [dmSansFontsLoaded] = useDmSansFonts({
-    DMSans_400Regular,
-    DMSans_500Medium,
-  });
+  useInterFonts({ Inter_700Bold, Inter_600SemiBold });
+  useDmSansFonts({ DMSans_400Regular, DMSans_500Medium});
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [keepSignedIn, setKeepSignedIn] = useState(false);
 
   return (
-    /* Set background image */ 
+    /* SET BACKGROUND IMAGE */
     <ImageBackground source={require("../../assets/placeholder.png")} 
       style={styles.wrapper}
       resizeMode="cover" 
@@ -72,15 +67,16 @@ export default function Login() {
             </TouchableOpacity> 
           </View>
 
-          <TouchableOpacity style={styles.signInButton}>
+                {/* Add logic */}
+          <TouchableOpacity style={styles.signInButton} onPress={() => router.push("./Login")}>
             <Text style={styles.signInText}>Sign in</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.signUpRow}>
           <Text style={styles.signUpText}>Don’t have an account? </Text>
-          <TouchableOpacity>
-            <Link style={styles.signUpLink} href="./Register">Sign up</Link>
+          <TouchableOpacity onPress={() => router.push("./Register")}>
+            <Text style={styles.signUpLink}>Sign up</Text>
           </TouchableOpacity>
         </View>
       </LinearGradient>
