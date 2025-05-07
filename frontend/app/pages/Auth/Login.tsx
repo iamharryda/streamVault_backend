@@ -61,8 +61,7 @@ export default function Login() {
               <Text style={styles.checkboxLabel}>Keep me signed in</Text>
             </TouchableOpacity>
 
-              {/* Add logic for forgot password - Popup/page? */}
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push("./ForgotPassword")}>
               <Text style={styles.forgotPassword}>Forgot Password?</Text> 
             </TouchableOpacity> 
           </View>
