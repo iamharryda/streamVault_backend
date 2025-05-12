@@ -8,55 +8,70 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 const Navbar = () => {
 
     return (
-        <View style= {styles.container}>
-            <View style= {styles.pfBorder}>
-                <TouchableOpacity style={styles.profile}>
-                    <image href="" style={styles.pfp}></image>
-                    <View style={styles.pfFlex}>
-                        <Text style={styles.name}>John Doe</Text>
-                        <Text style={styles.place}>Dublin, Ireland</Text>
-                    </View>
+        <View style= {styles.navbar}>
+            <View style= {styles.container}>
+                <View style= {styles.pfBorder}>
+                    <TouchableOpacity style={styles.profile}
+                    onPress={() => window.location.href = /* profile */''}>
+                        <image href="" style={styles.pfp}></image>
+                        <View style={styles.pfFlex}>
+                            <Text style={styles.name}>John Doe</Text>
+                            <Text style={styles.place}>Dublin, Ireland</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+                <TouchableOpacity style={styles.trendingFlex}
+                onPress={() => window.location.href = /* trending */''}>
+                    <Ionicons name="flame" style={styles.trendingIcon}/>
+                    <Text style = {styles.trending}>Trending</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.listFlex}
+                onPress={() => window.location.href = /* search */''}>
+                    <AntDesign name="search1" style={styles.icon}/>
+                    <Text style={styles.text}>Search</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.listFlex}
+                onPress={() => window.location.href = /* watchlist */''}>
+                    <AntDesign name="laptop" style={styles.icon}/>
+                    <Text style={styles.text}>Watchlist</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.listFlex}
+                onPress={() => window.location.href = /* recent */''}>
+                    <AntDesign name="clockcircleo" style={styles.icon}/>
+                    <Text style={styles.text}>Recently watched</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.listFlex}
+                onPress={() => window.location.href = /* lists */''}>
+                    <AntDesign name="bars" style={styles.icon}/>
+                    <Text style={styles.text}>Lists</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.listFlex}
+                onPress={() => window.location.href = /* activity */''}>
+                    <Feather name="activity" style={styles.icon}/>
+                    <Text style={styles.text}>Activity</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.listFlex}
+                onPress={() => window.location.href = /* Lang&region */''}>
+                    <AntDesign name="find" style={styles.icon}/>
+                    <Text style={styles.text}>Language & Region</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.listFlex}
+                onPress={() => window.location.href = /* Settings */''}>
+                    <AntDesign name="setting" style={styles.icon}/>
+                    <Text style={styles.text}>Settings</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.listFlex}
+                onPress={() => window.location.href = /* About */''}>
+                    <AntDesign name="infocirlceo" style={styles.icon}/>
+                    <Text style={styles.text}>About StreamVault</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.listFlex}
+                onPress={() => window.location.href = '../pages/Auth/Landing'}>
+                    <AntDesign name="logout" style={styles.icon}/>
+                    <Text style={styles.text}>Sign Out</Text>
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.trendingFlex}>
-                <Ionicons name="flame" style={styles.trendingIcon}/>
-                <Text style = {styles.trending}>Trending</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.listFlex}>
-                <AntDesign name="search1" style={styles.icon}/>
-                <Text style={styles.text}>Search</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.listFlex}>
-                <AntDesign name="laptop" style={styles.icon}/>
-                <Text style={styles.text}>Watchlist</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.listFlex}>
-                <AntDesign name="clockcircleo" style={styles.icon}/>
-                <Text style={styles.text}>Recently watched</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.listFlex}>
-                <AntDesign name="bars" style={styles.icon}/>
-                <Text style={styles.text}>Lists</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.listFlex}>
-                <Feather name="activity" style={styles.icon}/>
-                <Text style={styles.text}>Activity</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.listFlex}>
-                <AntDesign name="find" style={styles.icon}/>
-                <Text style={styles.text}>Language & Region</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.listFlex}>
-                <AntDesign name="setting" style={styles.icon}/>
-                <Text style={styles.text}>Settings</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.listFlex}>
-                <AntDesign name="infocirlceo" style={styles.icon}/>
-                <Text style={styles.text}>About StreamVault</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.listFlex}>
-                <AntDesign name="logout" style={styles.icon}/>
-                <Text style={styles.text}>Sign Out</Text>
+            <TouchableOpacity style= {styles.emptyspace}>
             </TouchableOpacity>
         </View>
       );
@@ -64,11 +79,19 @@ const Navbar = () => {
 export default Navbar
 
 const styles = StyleSheet.create ({
+    navbar: {
+        flex: 1,
+        flexDirection: 'row', 
+    },
     container: {
         backgroundColor: '#0D282F',
-        width: 299, minHeight: 700,
+        width: 299,
         flexDirection: 'column',
     }, 
+    emptyspace: {
+        backgroundColor: 'blue',
+        width: '100%', height: '100%',
+    },
     icon: {
         color: '#B1B8B9',
         marginLeft: 16, marginTop: 10, marginBottom: 10,
