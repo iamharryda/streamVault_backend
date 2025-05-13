@@ -1,13 +1,10 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { View, TouchableOpacity, StyleSheet, Animated } from "react-native";
-import { useFonts as useInterFonts, Inter_600SemiBold } from "@expo-google-fonts/inter";
 
 export default function ToggleButton() {
     const [selectedTab, setSelectedTab] = useState("Movies");
     const animation = useRef(new Animated.Value(0)).current;
     const [tabWidth, setTabWidth] = useState(0);
-
-    useInterFonts({ Inter_600SemiBold });
 
     useEffect(() => {
         Animated.timing(animation, {

@@ -1,15 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useFonts as useInterFonts, Inter_700Bold, Inter_600SemiBold, Inter_500Medium } from "@expo-google-fonts/inter";
-import { useFonts as useDmSansFonts, DMSans_400Regular } from "@expo-google-fonts/dm-sans";
 import { useRouter } from "expo-router";
 
 export default function Welcome() {
   const router = useRouter();
-  
-  useInterFonts({ Inter_700Bold, Inter_600SemiBold, Inter_500Medium });
-  useDmSansFonts({ DMSans_400Regular });
 
   return (
         /* SET BACKGROUND IMAGE */
