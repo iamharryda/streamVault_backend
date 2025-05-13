@@ -1,16 +1,32 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState, useRef } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Animated } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import Feather from '@expo/vector-icons/Feather';
 import Ionicons from '@expo/vector-icons/Ionicons';
 // https://icons.expo.fyi/Index
 
-const Navbar = () => {
+const Navmenu = () => {
+
+    const [isVisible, setIsVisible] = useState(true);
+    const slideAnim = useRef(new Animated.Value(0)).current;
+
+    const closeMenu = () => {
+        Animated.timing(slideAnim, {
+        toValue: -300, // Slide out to the left
+        duration: 300,
+        useNativeDriver: true,
+    }).start(() => setIsVisible(false));
+    };
+
+    if (!isVisible) {
+        return null;
+    }
 
     return (
-        <View style= {styles.navbar}>
+        <Animated.View style={[styles.navmenu, { transform: [{ translateX: slideAnim }] }]}>
             <View style= {styles.container}>
-                <View style= {styles.pfBorder}>
+                <View style={styles.pfBorder}>
+
                     <TouchableOpacity style={styles.profile}
                     onPress={() => window.location.href = /* profile */''}>
                         <image href="" style={styles.pfp}></image>
@@ -19,69 +35,83 @@ const Navbar = () => {
                             <Text style={styles.place}>Dublin, Ireland</Text>
                         </View>
                     </TouchableOpacity>
+
                 </View>
                 <TouchableOpacity style={styles.trendingFlex}
                 onPress={() => window.location.href = /* trending */''}>
                     <Ionicons name="flame" style={styles.trendingIcon}/>
                     <Text style = {styles.trending}>Trending</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.listFlex}
                 onPress={() => window.location.href = /* search */''}>
                     <AntDesign name="search1" style={styles.icon}/>
                     <Text style={styles.text}>Search</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.listFlex}
                 onPress={() => window.location.href = /* watchlist */''}>
                     <AntDesign name="laptop" style={styles.icon}/>
                     <Text style={styles.text}>Watchlist</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.listFlex}
                 onPress={() => window.location.href = /* recent */''}>
                     <AntDesign name="clockcircleo" style={styles.icon}/>
                     <Text style={styles.text}>Recently watched</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.listFlex}
                 onPress={() => window.location.href = /* lists */''}>
                     <AntDesign name="bars" style={styles.icon}/>
                     <Text style={styles.text}>Lists</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.listFlex}
                 onPress={() => window.location.href = /* activity */''}>
                     <Feather name="activity" style={styles.icon}/>
                     <Text style={styles.text}>Activity</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.listFlex}
                 onPress={() => window.location.href = /* Lang&region */''}>
                     <AntDesign name="find" style={styles.icon}/>
                     <Text style={styles.text}>Language & Region</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.listFlex}
                 onPress={() => window.location.href = /* Settings */''}>
                     <AntDesign name="setting" style={styles.icon}/>
                     <Text style={styles.text}>Settings</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.listFlex}
                 onPress={() => window.location.href = /* About */''}>
                     <AntDesign name="infocirlceo" style={styles.icon}/>
                     <Text style={styles.text}>About StreamVault</Text>
                 </TouchableOpacity>
+
                 <TouchableOpacity style={styles.listFlex}
                 onPress={() => window.location.href = '../pages/Auth/Landing'}>
                     <AntDesign name="logout" style={styles.icon}/>
                     <Text style={styles.text}>Sign Out</Text>
                 </TouchableOpacity>
+                <View style={styles.navbottom}></View>
             </View>
-            <TouchableOpacity style= {styles.emptyspace}>
+
+            <TouchableOpacity style= {styles.emptyspace} onPress={closeMenu}>
             </TouchableOpacity>
-        </View>
+            
+        </Animated.View>
       );
 }
-export default Navbar
+export default Navmenu
 
 const styles = StyleSheet.create ({
-    navbar: {
-        flex: 1,
-        flexDirection: 'row', 
+    navmenu: {
+        top: 0,
+        width: 299,
+        flexDirection: 'row',
     },
     container: {
         backgroundColor: '#0D282F',
@@ -89,9 +119,15 @@ const styles = StyleSheet.create ({
         flexDirection: 'column',
     }, 
     emptyspace: {
-        backgroundColor: 'blue',
-        width: '100%', height: '100%',
+        backgroundColor: 'transparent',
+        width: '1000%', height: '100%',
     },
+    navbottom: {
+        bottom: 0,
+        width: 299, height: 200,
+        backgroundColor: '#0D282F',
+    },
+    
     icon: {
         color: '#B1B8B9',
         marginLeft: 16, marginTop: 10, marginBottom: 10,
