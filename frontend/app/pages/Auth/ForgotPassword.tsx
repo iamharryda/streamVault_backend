@@ -1,18 +1,12 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, TextInput } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useFonts as useInterFonts, Inter_700Bold, Inter_600SemiBold, Inter_500Medium } from "@expo-google-fonts/inter";
-import { useFonts as useDmSansFonts, DMSans_400Regular, DMSans_500Medium } from "@expo-google-fonts/dm-sans";
 import { useRouter } from "expo-router";
 
 export default function ForgotPassword() {
   const router = useRouter();
-  
-  useInterFonts({ Inter_700Bold, Inter_600SemiBold, Inter_500Medium });
-  useDmSansFonts({ DMSans_400Regular, DMSans_500Medium });
 
-    const [email, setEmail] = useState("");
-
+  const [email, setEmail] = useState("");
 
   return (
     /* SET BACKGROUND IMAGE */

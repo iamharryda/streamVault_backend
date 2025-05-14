@@ -2,16 +2,11 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { useFonts as useInterFonts, Inter_700Bold, Inter_600SemiBold } from "@expo-google-fonts/inter"; 
-import { useFonts as useDmSansFonts, DMSans_400Regular, DMSans_500Medium } from "@expo-google-fonts/dm-sans";
 import { MaterialIcons } from "@expo/vector-icons";
 
 
 export default function Login() {
   const router = useRouter();
-
-  useInterFonts({ Inter_700Bold, Inter_600SemiBold });
-  useDmSansFonts({ DMSans_400Regular, DMSans_500Medium});
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

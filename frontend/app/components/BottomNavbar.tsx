@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
-import { useFonts, Inter_400Regular } from "@expo-google-fonts/inter";
 import { HomeIcon, DiscoverIcon, PlusIcon, ReviewIcon, AccountIcon } from './icons';
 
 export default function Navbar() {
-  useFonts({ Inter_400Regular });
 
   const [selectedTab, setSelectedTab] = useState("Home");
 
