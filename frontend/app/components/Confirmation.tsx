@@ -4,7 +4,6 @@ import { Modal, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 const Confirmation = () => {
   return (
     <Modal transparent visible={true}>
-      <View style={styles.overlay}>
         <View style={styles.modal}>
 
           <View style={styles.textContainer}>
@@ -22,7 +21,6 @@ const Confirmation = () => {
               </TouchableOpacity>
             </View>
         </View>
-      </View>
     </Modal>
   );
 };
@@ -30,11 +28,6 @@ const Confirmation = () => {
 export default Confirmation;
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   modal: {
     width: 361,
     height: 182,
