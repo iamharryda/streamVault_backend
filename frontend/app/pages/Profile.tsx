@@ -1,6 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
+import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import Feather from '@expo/vector-icons/Feather';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 // https://icons.expo.fyi/Index
 
@@ -20,8 +23,56 @@ const Profile = () => {
                     </View>
                 </View>
             </View>
-            <View style={styles.bottomProfileColumn}>
-                <View></View>
+            <View style={styles.bottomProfile}>
+                <View style={styles.bottomProfilerow}>
+                    <TouchableOpacity style={styles.topContainers}>
+                        <AntDesign name="star" style={styles.topIcons}/>
+                        <Text style={styles.topText1}>numb</Text>
+                        <Text style={styles.topText2}>Ratings</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.topContainers}>
+                        <MaterialCommunityIcons name="note-edit" style={styles.topIcons}/>
+                        <Text style={styles.topText1}>numb</Text>
+                        <Text style={styles.topText2}>Reviews</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.topContainers}>
+                        <Ionicons name="tv" style={styles.topIcons}/>
+                        <Text style={styles.topText1}>numb</Text>
+                        <Text style={styles.topText2}>Watchlist</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.topContainers}>
+                        <AntDesign name="heart" style={styles.topIcons}/>
+                        <Text style={styles.topText1}>numb</Text>
+                        <Text style={styles.topText2}>Favourites</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.bottomProfilecolumn}>
+                    <TouchableOpacity style={styles.bottomContainers}>
+                        <MaterialCommunityIcons name="note-edit-outline" style={styles.bottomIcons}/>
+                        <Text style={styles.bottomText}> My Reviews</Text>
+                        <MaterialIcons name="keyboard-arrow-right" style={styles.bottomArrow}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.bottomContainers}>
+                        <Ionicons name="tv-outline" style={styles.bottomIcons}/>
+                        <Text style={styles.bottomText}>Watchlist</Text>
+                        <MaterialIcons name="keyboard-arrow-right" style={styles.bottomArrow}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.bottomContainers}>
+                        <AntDesign name="hearto" style={styles.bottomIcons}/>
+                        <Text style={styles.bottomText}>Favourites</Text>
+                        <MaterialIcons name="keyboard-arrow-right" style={styles.bottomArrow}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.bottomContainers}>
+                        <Feather name="users" style={styles.bottomIcons}/>
+                        <Text style={styles.bottomText}>Followers & Following</Text>
+                        <MaterialIcons name="keyboard-arrow-right" style={styles.bottomArrow}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.bottomContainers}>
+                        <Ionicons name="ribbon-outline" style={styles.bottomIcons}/>
+                        <Text style={styles.bottomText}>Badges & Achievements</Text>
+                        <MaterialIcons name="keyboard-arrow-right" style={styles.bottomArrow}/>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     );
@@ -85,7 +136,7 @@ const styles = StyleSheet.create ({
     },
     
     //bottom part of the profile
-    bottomProfileColumn: {
+    bottomProfile: {
         flexDirection: 'column',
         alignItems: 'center',
         backgroundColor: '#04191E',
@@ -93,5 +144,59 @@ const styles = StyleSheet.create ({
     bottomProfilerow: {
         flexDirection: 'row',
         alignItems: 'center',
+    },
+    bottomProfilecolumn: {
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+
+    topContainers: {
+        backgroundColor: '#0D282F',
+        height: 90, width: 78,
+        marginLeft: 4, marginRight: 4,
+        marginTop: 32, marginBottom: 28,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 8,
+    },
+    topIcons: {
+        color: '#FACC15',
+        fontSize: 24,
+    },
+    topText1: {
+        color: '#E6E8E9',
+        fontSize: 18,
+        fontWeight: 700,
+    },
+    topText2: {
+        color: '#576568',
+        fontSize: 12,
+        fontWeight: 500,
+    },
+
+    bottomContainers: {
+        backgroundColor: '#0D282F',
+        flexDirection: 'row',
+        marginTop: 4, marginBottom: 4,
+        borderRadius: 8,
+        alignItems: 'center',
+        padding: 16,
+        width: 336
+    },
+    bottomIcons: {
+        color: '#B1B8B9',
+        fontWeight: 500,
+        fontSize: 24,
+    },
+    bottomText: {
+        color: '#B1B8B9',
+        fontWeight: 500,
+        fontSize: 14,
+        paddingLeft: 18,
+    },
+    bottomArrow: {
+        color: '#B1B8B9',
+        fontWeight: 500,
+        fontSize: 24,
     }
 })
