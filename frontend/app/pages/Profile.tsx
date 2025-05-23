@@ -72,6 +72,7 @@ const Profile = () => {
                         <Text style={styles.bottomText}>Badges & Achievements</Text>
                         <MaterialIcons name="keyboard-arrow-right" style={styles.bottomArrow}/>
                     </TouchableOpacity>
+                    <View style={styles.emptyBottom}></View>
                 </View>
             </View>
         </View>
@@ -100,7 +101,7 @@ const styles = StyleSheet.create ({
 
     backIcon: {
         color: '#707B7D',
-        fontSize: 16,
+        fontSize: 24,
         marginLeft: 10, marginTop: 37,
         padding: 6,
         position: 'absolute',
@@ -198,5 +199,11 @@ const styles = StyleSheet.create ({
         color: '#B1B8B9',
         fontWeight: 500,
         fontSize: 24,
-    }
+        position: 'absolute',
+        right: 16,
+    },
+    emptyBottom: {
+        backgroundColor: '#04191E',
+        height: '100%', width: '1000%',
+    },
 })
