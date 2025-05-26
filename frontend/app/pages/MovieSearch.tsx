@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, FlatList, StyleSheet, Keyboard } from 'react-native';
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Feather, AntDesign, Entypo } from '@expo/vector-icons';
 
 export default function MovieSearch() {
   const [searchText, setSearchText] = useState('');
@@ -12,10 +12,10 @@ export default function MovieSearch() {
     const trimmed = searchText.trim();
     if (trimmed.length === 0) return;
 
-    // no dublicates please
-    if (!recentSearches.includes(trimmed)) {
+    // no dublicates please - what
+    /*if (!recentSearches.includes(trimmed)) {
       setRecentSearches([trimmed, ...recentSearches]);
-    }
+    }*/
 
     setSearchText('');
     Keyboard.dismiss(); 
@@ -33,21 +33,23 @@ export default function MovieSearch() {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-         <Ionicons name="close" size={24} color="#888" />
-  <Text style={styles.headerTitle}>Add a movie or tv show</Text>
+        <TouchableOpacity>
+          <AntDesign name="close" style={styles.closeIcon}/>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>Add a movie or tv show</Text>
       </View>
 
       {/* Search Bar */}
       <View style={styles.searchBar}>
         <TouchableOpacity style={styles.dropdown}>
           <Text style={styles.dropdownText}>Movie</Text>
-          <MaterialIcons name="arrow-drop-down" size={20} color="#ffcc00" />
+          <Entypo name="chevron-small-down" style={styles.dropdownIcon}/>
         </TouchableOpacity>
 
         <TextInput
           style={styles.searchInput}
           placeholder="Search a movie or tv show"
-          placeholderTextColor="#ccc"
+          placeholderTextColor="#576568"
           value={searchText}
           onChangeText={setSearchText}
           onSubmitEditing={handleSearchSubmit}
@@ -56,7 +58,7 @@ export default function MovieSearch() {
 
         {searchText.length > 0 && (
           <TouchableOpacity onPress={() => setSearchText('')}>
-            <Ionicons name="close" size={20} color="#ccc" />
+            <AntDesign name="close" style={styles.eraseIcon}/>
           </TouchableOpacity>
         )}
       </View>
@@ -65,10 +67,10 @@ export default function MovieSearch() {
       <View style={styles.recentHeader}>
         <Text style={styles.recentText}>RECENT SEARCHES</Text>
         <TouchableOpacity onPress={clearRecentSearches}>
-          <Text style={styles.clearText}>Clear</Text>
+          <Text style={styles.recentText}>Clear</Text>
         </TouchableOpacity>
       </View>
-
+{/* here so far, so i dont get lost */}
       {/* Recent Search List */}
       <FlatList
         data={recentSearches}
@@ -76,13 +78,13 @@ export default function MovieSearch() {
         renderItem={({ item, index }) => (
           <View style={styles.searchItem}>
             <View style={styles.searchItemLeft}>
-              <Ionicons name="time-outline" size={18} color="#aaa" />
+              <Feather name="clock" size={24} color="black" />
               <Text style={styles.searchItemText} numberOfLines={1} ellipsizeMode="tail">
                 {item}
               </Text>
             </View>
             <TouchableOpacity onPress={() => removeSearchItem(index)}>
-              <MaterialIcons name="close" size={18} color="#aaa" />
+              <AntDesign name="close" size={24} color='#B1B8B9'/>
             </TouchableOpacity>
           </View>
         )}
@@ -93,70 +95,77 @@ export default function MovieSearch() {
 
 const styles = StyleSheet.create({
   container: {
-  flex: 1,
-  backgroundColor: '#071013',
-  paddingTop: 40,
-},
-topLine: {
-  height: 2,
-  backgroundColor: '#00baff', 
-},
+    flex: 1,
+    backgroundColor: '#04191E',
+  },
 
-header: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  backgroundColor: '#071013',
-  paddingVertical: 16,
-  paddingHorizontal: 16,
-},
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#04171B',
+    paddingTop: 20,
+  },
+  headerTitle: {
+    color: '#E6E8E9',
+    fontSize: 18,
+    fontWeight: '700',
+    paddingLeft: 5,
+  },
+  closeIcon: {
+    fontSize: 24,
+    color: '#B1B8B9',
+    paddingLeft: 16, paddingRight: 16,
+    paddingTop: 23, paddingBottom: 23,
+  },
 
-headerTitle: {
-  color: 'white',
-  fontSize: 16,
-  fontWeight: '500',
-  marginLeft: 12, 
-},
- searchBar: {
-  flexDirection: 'row',
-  alignItems: 'center',
-  backgroundColor: '#0f1a1c',
-  borderRadius: 4,
-  paddingHorizontal: 12,
-  paddingVertical: 8,
-  borderWidth: 1,
-  borderColor: '#264348',
-  marginBottom: 16,
- },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#0D282F',
+    marginBottom: 16,
+  },
  
   dropdown: {
   flexDirection: 'row',
   alignItems: 'center',
-  paddingRight: 8,
+  paddingRight: 8, paddingLeft: 16,
+  paddingTop: 20, paddingBottom: 20,
   },
-
   dropdownText: {
-    color: '#ffcc00',
+    color: '#FACC15',
     fontWeight: 'bold',
-    marginRight: 4,
   },
+  dropdownIcon: {
+    color: '#FACC15',
+    fontSize: 24,
+    marginRight: 21
+  }, 
+
   searchInput: {
     flex: 1,
-    color: 'white',
+    color: '#E6E8E9',
+    fontSize: 14,
   },
+  eraseIcon: {
+    fontSize: 24,
+    color: '#B1B8B9',
+    paddingLeft: 16, paddingRight: 16,
+    paddingTop: 20, paddingBottom: 20,
+  },
+
   recentHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 8,
+    marginTop: 62, marginBottom: 31, 
+    marginLeft: 16, marginRight: 16,
   },
   recentText: {
-    color: '#888',
-    fontSize: 12,
+    color: '#B1B8B9',
+    fontSize: 14,
+    fontWeight: 500,
   },
-  clearText: {
-    color: '#aaa',
-    fontSize: 12,
-  },
+
   searchItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
