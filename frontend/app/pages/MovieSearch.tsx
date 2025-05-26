@@ -70,6 +70,16 @@ export default function MovieSearch() {
           <Text style={styles.recentText}>Clear</Text>
         </TouchableOpacity>
       </View>
+
+      <View style={styles.searchItem}>
+            <View style={styles.searchItemLeft}>
+              <Feather name="clock" style={styles.clockIcon}/>
+              <Text style={styles.searchItemText}>
+                blablabla
+              </Text>
+              <Feather name="arrow-up-left" style={styles.arrowIcon}/>
+            </View>
+          </View>
 {/* here so far, so i dont get lost */}
       {/* Recent Search List */}
       <FlatList
@@ -78,14 +88,16 @@ export default function MovieSearch() {
         renderItem={({ item, index }) => (
           <View style={styles.searchItem}>
             <View style={styles.searchItemLeft}>
-              <Feather name="clock" size={24} color="black" />
+              <Feather name="clock" style={styles.clockIcon}/>
               <Text style={styles.searchItemText} numberOfLines={1} ellipsizeMode="tail">
                 {item}
               </Text>
+              <Feather name="arrow-up-left" style={styles.arrowIcon}/>
             </View>
+            {/* removes a search?
             <TouchableOpacity onPress={() => removeSearchItem(index)}>
               <AntDesign name="close" size={24} color='#B1B8B9'/>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         )}
       />
@@ -168,20 +180,25 @@ const styles = StyleSheet.create({
 
   searchItem: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#1e2c30',
   },
   searchItemLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
+    marginBottom: 31,
   },
   searchItemText: {
-    color: '#e0e0e0',
-    marginLeft: 12,
-    flexShrink: 1,
+    color: '#B1B8B9',
+    fontSize: 16,
+  },
+  clockIcon: {
+    color: '#B1B8B9',
+    fontSize: 18,
+    paddingLeft: 16, paddingRight: 16,
+  },
+  arrowIcon: {
+    color: '#B1B8B9',
+    fontSize: 20,
+    paddingRight: 16,
   },
 });
