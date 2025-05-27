@@ -39,13 +39,14 @@ export default function MovieSearch() {
         <Text style={styles.headerTitle}>Add a movie or tv show</Text>
       </View>
 
-      {/* Search Bar */}
+      {/* dropdown to switch to shows */}
       <View style={styles.searchBar}>
         <TouchableOpacity style={styles.dropdown}>
-          <Text style={styles.dropdownText}>Movie</Text>
+          <Text style={styles.dropdownText}>Movie</Text> 
           <Entypo name="chevron-small-down" style={styles.dropdownIcon}/>
         </TouchableOpacity>
 
+        {/* Search Bar */}
         <TextInput
           style={styles.searchInput}
           placeholder="Search a movie or tv show"
@@ -56,6 +57,7 @@ export default function MovieSearch() {
           returnKeyType="search"
         />
 
+        {/* erases text from search bar */}
         {searchText.length > 0 && (
           <TouchableOpacity onPress={() => setSearchText('')}>
             <AntDesign name="close" style={styles.eraseIcon}/>
@@ -71,16 +73,6 @@ export default function MovieSearch() {
         </TouchableOpacity>
       </View>
 
-      <View style={styles.searchItem}>
-            <View style={styles.searchItemLeft}>
-              <Feather name="clock" style={styles.clockIcon}/>
-              <Text style={styles.searchItemText}>
-                blablabla
-              </Text>
-              <Feather name="arrow-up-left" style={styles.arrowIcon}/>
-            </View>
-          </View>
-{/* here so far, so i dont get lost */}
       {/* Recent Search List */}
       <FlatList
         data={recentSearches}
@@ -94,8 +86,8 @@ export default function MovieSearch() {
               </Text>
               <Feather name="arrow-up-left" style={styles.arrowIcon}/>
             </View>
-            {/* removes a search?
-            <TouchableOpacity onPress={() => removeSearchItem(index)}>
+            {/* removes a search? */}
+            {/* <TouchableOpacity onPress={() => removeSearchItem(index)}>
               <AntDesign name="close" size={24} color='#B1B8B9'/>
             </TouchableOpacity> */}
           </View>
@@ -178,6 +170,7 @@ const styles = StyleSheet.create({
     fontWeight: 500,
   },
 
+  /* recent searches */
   searchItem: {
     flexDirection: 'row',
   },
@@ -199,6 +192,9 @@ const styles = StyleSheet.create({
   arrowIcon: {
     color: '#B1B8B9',
     fontSize: 20,
-    paddingRight: 16,
+    paddingRight: 16, paddingLeft: 8,
+    paddingTop: 5, paddingBottom: 5,
+    position: 'absolute',
+    right: 0,
   },
 });
