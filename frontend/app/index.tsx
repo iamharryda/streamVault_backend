@@ -1,11 +1,11 @@
 import { View } from "react-native";
-import Landing from './pages/Landing';
+import MovieSearch from './pages/MovieSearch';
 
 
 export default function Index() {
   return (
     <View style={{ flex: 1 }}>
-      <Landing/>
+      <MovieSearch/>
     </View>
   );
 }
