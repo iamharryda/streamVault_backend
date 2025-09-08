@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Switch, Platform } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
+import { auth } from "../../../FirebaseConfig";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function Register() {
 const router = useRouter();
@@ -11,6 +13,16 @@ const router = useRouter();
   const [password, setPassword] = useState("");
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false);
+
+  const handleSignUp = async () => {
+    try {
+      const user =await createUserWithEmailAndPassword(auth, email, password);
+      router.push("../MovieSearch");
+    } catch (error: any) {
+      console.error("Error signing up:", error);
+      alert("Sign up failed: " + error.message);
+    }
+  };
 
   return (
         /* SET BACKGROUND IMAGE */
@@ -79,7 +91,7 @@ const router = useRouter();
             </View>
 
               {/* Add logic to sign up the user */}
-            <TouchableOpacity style={styles.signUpButton}>
+            <TouchableOpacity style={styles.signUpButton} onPress={handleSignUp} disabled={!(isTermsAccepted && isPrivacyAccepted && email && password)}>
               <Text style={styles.signUpButtonText}>Sign up</Text>
             </TouchableOpacity>
           </View>

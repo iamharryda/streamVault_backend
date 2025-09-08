@@ -3,14 +3,27 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } 
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
+import { auth } from "../../../FirebaseConfig";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 
 export default function Login() {
   const router = useRouter();
 
   const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [keepSignedIn, setKeepSignedIn] = useState(false);
+
+  const handleSignIn = async () => {
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      router.push("../MovieSearch");
+    } catch (error: any) {
+      console.error("Error signing in:", error);
+      alert("Sign in failed: " + error.message);
+    }
+  };
 
   return (
     /* SET BACKGROUND IMAGE */
@@ -31,7 +44,10 @@ export default function Login() {
             placeholder="Username"
             placeholderTextColor="#888"
             value={username}
-            onChangeText={setUsername}
+            onChangeText={(text) => {
+              setUsername(text);
+              setEmail(text);
+            }}
           />
 
           <TextInput
@@ -62,7 +78,7 @@ export default function Login() {
           </View>
 
                 {/* Add logic */}
-          <TouchableOpacity style={styles.signInButton} onPress={() => router.push("./Login")}>
+          <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
             <Text style={styles.signInText}>Sign in</Text>
           </TouchableOpacity>
         </View>
