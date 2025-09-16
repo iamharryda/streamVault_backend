@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground } 
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { MaterialIcons } from "@expo/vector-icons";
-import { auth } from "../../../FirebaseConfig";
+import { auth } from "../../FirebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 
@@ -27,7 +27,7 @@ export default function Login() {
 
   return (
     /* SET BACKGROUND IMAGE */
-    <ImageBackground source={require("../../assets/placeholder.png")} 
+    <ImageBackground source={require("../assets/placeholder.png")} 
       style={styles.wrapper}
       resizeMode="cover" 
     >
