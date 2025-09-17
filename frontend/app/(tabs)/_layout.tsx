@@ -41,6 +41,7 @@ export default function Layout() {
             <Tabs.Screen name="TabBarButton" options={{ tabBarButton: SpecialTabButton }} listeners={{ tabPress: (e) => { e.preventDefault(); } }} />
             <Tabs.Screen name="MyReview" options={{ title: "My Review", tabBarLabel: "My Review", tabBarIcon: ({ color, size }) => <Ionicons name="star" size={size} color={color} /> }} />
             <Tabs.Screen name="Account" options={{ title: "Account", tabBarLabel: "Account", tabBarIcon: ({ color, size }) => <Ionicons name="person" size={size} color={color} /> }} />
+            <Tabs.Screen name="SearchScreen" options={{ href: null }} />
         </Tabs>
     );
 }
