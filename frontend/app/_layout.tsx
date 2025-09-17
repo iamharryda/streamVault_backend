@@ -28,8 +28,10 @@ export default function Layout() {
     return (
         <Stack
             screenOptions={{
-                headerShown: false,
+                headerShown: false
             }}
-        />
+        >
+            <Stack.Screen name='/' />
+        </Stack>
     );
 }

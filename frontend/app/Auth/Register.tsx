@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ImageBackground, Switch, Platform } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
-import { auth } from "../../../FirebaseConfig";
+import { auth } from "../../FirebaseConfig";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 export default function Register() {
@@ -27,7 +27,7 @@ const router = useRouter();
   return (
         /* SET BACKGROUND IMAGE */
     <ImageBackground
-    source={require("../../assets/placeholder.png")}
+    source={require("../assets/placeholder.png")}
       style={styles.wrapper}
       resizeMode="cover"
     >
