@@ -24,6 +24,32 @@ just navigate to backend
 ```
 
 
-
-
+## posts interface
+{
+  "id": 1,
+  "postType": "text",
+  "body": "Grateful for the incredible experience...",
+  "image": null,
+  "movieId": 603692,
+  "author": {
+    "id": 7,
+    "email": "sam@example.com",
+    "firstname": "Sam",
+    "lastname": "Lee"
+  },
+  "comments": [
+    { "id": 11, "userId": 2, "body": "Nice!", "createdAt": "2025-09-16T10:03:00Z" }
+  ],
+  "likes": [2, 5, 9],
+  "createdAt": "2025-09-16T10:00:00Z"
+}
+## user interface
+{
+  "id": 7,
+  "email": "sam@example.com",
+  "firstname": "Sam",
+  "lastname": "Lee",
+  "postIds": [1, 4, 9],
+  "followerIds": [2,3,4],
+}
 
