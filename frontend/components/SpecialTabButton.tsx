@@ -10,7 +10,7 @@ export const SpecialTabButton = () => {
 
     return (
         <TouchableOpacity style={styles.button} onPress={handlePress}>
-            <Ionicons name="add" size={25} color="#04191E" />
+            <Ionicons name="add" size={30} color="#04191E" />
         </TouchableOpacity>
     );
 }
