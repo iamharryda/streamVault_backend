@@ -2,7 +2,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView } from "react-native";
 import { getTrendingMovies, getNowPlayingMovies } from "@/src/api/tmdb";
 import { useEffect, useState } from "react";
-import MovieSection from "@/components/MovieSection";
+import MovieSection from "@/src/components/MovieSection";
 
 type Movie = {
   id: number;
