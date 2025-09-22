@@ -1,5 +1,4 @@
 import { Link } from "expo-router";
-import React from "react";
 import { Image, Text, TouchableOpacity, StyleSheet } from "react-native";
 
 type Props = {

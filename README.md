@@ -38,11 +38,13 @@ just navigate to backend
     "lastname": "Lee"
   },
   "comments": [
-    { "id": 11, "userId": 2, "body": "Nice!", "createdAt": "2025-09-16T10:03:00Z" }
+    { "id": 11, "userId": 2, "body": "Nice!", "createdAt": "2025-09-16T10:03:00Z" } // parent id needed for threaded, isReply
   ],
   "likes": [2, 5, 9],
   "createdAt": "2025-09-16T10:00:00Z"
 }
+// reaction count, comment count
+// threaded comment
 ## user interface
 {
   "id": 7,
