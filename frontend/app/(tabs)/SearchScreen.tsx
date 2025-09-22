@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { View, TextInput, FlatList, StyleSheet } from 'react-native';
 import { searchMovies } from '@/src/api/tmdb';
-import MovieCard from '@/components/MovieCard';
+import MovieCard from '@/src/components/MovieCard';
 
 export default function SearchScreen() {
   const [query, setQuery] = useState('');
