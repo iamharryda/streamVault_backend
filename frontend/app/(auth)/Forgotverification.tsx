@@ -19,7 +19,7 @@ const fverification = () => {
 
   return (
     <ImageBackground
-      source={require("./jokerimage.png")}
+      source={require("../../assets/images/jokerimage.png")}
       style={styles.background}
       resizeMode="cover"
     >
