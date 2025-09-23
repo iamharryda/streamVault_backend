@@ -1,24 +1,23 @@
 import {
   View,
   Text,
-  TouchableWithoutFeedback,
-  Keyboard,
   Pressable,
   StyleSheet,
   TextInput,
   ImageBackground,
-  TouchableOpacity,
   Switch,
   Platform,
 } from "react-native";
 import React, { useState } from "react";
 import { Link, useRouter } from "expo-router";
+import axios from "axios";
 
 const register = () => {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false);
@@ -26,46 +25,16 @@ const register = () => {
   const [isChecked, setIsChecked] = React.useState(false);
   const [isPressed, setIsPressed] = React.useState(false);
 
-  const checkForm = (
-    username: string,
-    email: string,
-    password: string,
-    isTermsAccepted: boolean,
-    isPrivacyAccepted: boolean
-  ): void => {
-    if (
-      username.trim() !== "" &&
-      email.trim() !== "" &&
-      password.length >= 8 &&
-      isTermsAccepted &&
-      isPrivacyAccepted
-    ) {
-      console.log("Success: Form is valid and all conditions are met");
-      router.push("/Registerverification");
-    } else {
-      if (username.trim() === "") {
-        console.log("Error: Username is required");
-      }
-      if (email.trim() === "") {
-        console.log("Error: Email is required");
-      }
-      if (password.length < 8) {
-        console.log("Error: Password must be at least 8 characters long");
-      }
-      if (!isTermsAccepted) {
-        console.log("Error: You must accept the Terms of Use");
-      }
-      if (!isPrivacyAccepted) {
-        console.log("Error: You must agree to the Privacy Policy");
-      }
-    }
-  };
-
-  const handleSubmit = () => {
+  const handleRegister = async () => {
     try {
-      checkForm(username, email, password, isTermsAccepted, isPrivacyAccepted);
-    } catch (error: any) {
-      console.log("Error:", error.message);
+      const response = await axios.post("http://localhost:5008", {
+        name,
+        username,
+        email,
+        password,
+      });
+    } catch (err) {
+      console.log(err);
     }
   };
   return (
@@ -89,7 +58,10 @@ const register = () => {
           placeholder="Enter a username"
           placeholderTextColor="#888"
           value={username}
-          onChangeText={setUsername}
+          onChangeText={(text) => {
+            setUsername(text);
+            setName(text);
+          }}
         />
         <TextInput
           style={styles.input}
@@ -140,7 +112,7 @@ const register = () => {
           ]}
           onPressIn={() => setIsPressed(true)}
           onPressOut={() => setIsPressed(false)}
-          onPress={handleSubmit}
+          onPress={handleRegister}
         >
           <Text style={styles.buttonText}>Register an account</Text>
         </Pressable>
