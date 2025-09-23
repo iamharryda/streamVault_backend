@@ -12,7 +12,7 @@ import {
 } from "@expo-google-fonts/dm-sans";
 import { ActivityIndicator, View } from "react-native";
 import { Provider } from "react-redux";
-import { store } from "@/src/store/store"
+import { store } from "@/src/store/store";
 
 export default function Layout() {
   const [interLoaded] = loadInterFonts({

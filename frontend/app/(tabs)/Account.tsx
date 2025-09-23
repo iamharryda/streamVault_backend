@@ -116,7 +116,7 @@ export default function AccountScreen() {
       // setError(axios.isAxiosError(err) ? err.message : 'Unknown error occurred');
     } finally {
       // Small delay for better skeleton loader UX
-      setTimeout(() => setLoading(false), 500);
+      setTimeout(() => setLoading(false), 0);
     }
   };
 
