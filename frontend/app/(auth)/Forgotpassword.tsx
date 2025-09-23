@@ -6,13 +6,33 @@ import {
   TextInput,
   ImageBackground,
 } from "react-native";
-import React from "react";
-import { Link, useRouter } from "expo-router";
+import React, { useState } from "react";
+import { useRouter } from "expo-router";
+import axios from "axios";
 
 const forgotpassword = () => {
   const router = useRouter();
-  const [isChecked, setIsChecked] = React.useState(false);
-  const [isPressed, setIsPressed] = React.useState(false);
+  const [email, setEmail] = useState("");
+
+  const handleForgotPassword = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5008/api/v1/auth/forget-password",
+        {
+          email,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json", // explicitly tell backend this is JSON
+          },
+        }
+      );
+      router.push("/ForgotVerification");
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <ImageBackground
@@ -24,18 +44,18 @@ const forgotpassword = () => {
         <Text style={styles.title}>Enter your email</Text>
         <TextInput
           style={styles.input}
-          placeholder="Email"
+          placeholder="Enter your email"
           keyboardType="email-address"
           placeholderTextColor="#888"
+          value={email}
+          onChangeText={setEmail}
         />
         <Pressable
           style={({ pressed }) => [
             styles.button,
             pressed && styles.buttonPressed,
           ]}
-          onPressIn={() => setIsPressed(true)}
-          onPressOut={() => setIsPressed(false)}
-          onPress={() => router.push("./Resetpassword")}
+          onPress={handleForgotPassword}
         >
           <Text style={styles.buttonText}>Send code</Text>
         </Pressable>

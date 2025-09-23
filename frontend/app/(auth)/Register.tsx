@@ -9,7 +9,7 @@ import {
   Platform,
 } from "react-native";
 import React, { useState } from "react";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import axios from "axios";
 
 const register = () => {
@@ -22,19 +22,56 @@ const register = () => {
   const [isTermsAccepted, setIsTermsAccepted] = useState(false);
   const [isPrivacyAccepted, setIsPrivacyAccepted] = useState(false);
 
-  const [isChecked, setIsChecked] = React.useState(false);
-  const [isPressed, setIsPressed] = React.useState(false);
-
   const handleRegister = async () => {
+    if (!email) {
+      console.log("Error: Email is required");
+      return;
+    }
+    if (!username) {
+      console.log("Error: Username is required");
+      return;
+    }
+    if (username.length < 3) {
+      console.log("Error: Username must be at least 3 characters long");
+      return;
+    }
+    if (!password) {
+      console.log("Error: Password is required");
+      return;
+    }
+    if (password.length < 6) {
+      console.log("Error: Password must be at least 6 characters long");
+      return;
+    }
+    if (!isTermsAccepted) {
+      console.log("Error: You must accept the Terms of Use");
+      return;
+    }
+    if (!isPrivacyAccepted) {
+      console.log("Error: You must accept the Privacy Policy");
+      return;
+    }
+
     try {
-      const response = await axios.post("http://localhost:5008", {
-        name,
-        username,
-        email,
-        password,
-      });
+      console.log("Validation passed, attempting registration...");
+      const response = await axios.post(
+        "http://localhost:5008/api/v1/auth/register/init",
+        {
+          name,
+          username,
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      console.log("Registration successful:", response.data);
+      router.push("/RegisterVerification");
     } catch (err) {
-      console.log(err);
+      console.log("Registration error");
     }
   };
   return (
@@ -110,8 +147,6 @@ const register = () => {
             styles.button,
             pressed && styles.buttonPressed,
           ]}
-          onPressIn={() => setIsPressed(true)}
-          onPressOut={() => setIsPressed(false)}
           onPress={handleRegister}
         >
           <Text style={styles.buttonText}>Register an account</Text>

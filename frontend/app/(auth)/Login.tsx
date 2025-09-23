@@ -8,17 +8,38 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
+import axios from "axios";
 
 const login = () => {
   const router = useRouter();
 
-  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [isChecked, setIsChecked] = React.useState(false);
-  const [isPressed, setIsPressed] = React.useState(false);
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5008/api/v1/auth/login",
+        {
+          email,
+          password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json", // explicitly tell backend this is JSON
+          },
+        }
+      );
+      router.push("/(tabs)/Account");
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <ImageBackground
@@ -30,11 +51,11 @@ const login = () => {
         <Text style={styles.title}>Login</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your username"
+          placeholder="Enter your email"
           placeholderTextColor="#888"
-          value={username}
+          value={email}
           onChangeText={(text) => {
-            setUsername(text);
+            setName(text);
             setEmail(text);
           }}
         />
@@ -61,7 +82,7 @@ const login = () => {
           <TouchableOpacity style={styles.forgotPasswordContainer}>
             <Text
               style={styles.forgotPassword}
-              onPress={() => router.push("/Forgotpassword")}
+              onPress={() => router.push("/ForgotPassword")}
             >
               Forgot Password?
             </Text>
@@ -72,9 +93,7 @@ const login = () => {
             styles.button,
             pressed && styles.buttonPressed,
           ]}
-          onPressIn={() => setIsPressed(true)}
-          onPressOut={() => setIsPressed(false)}
-          onPress={() => {}}
+          onPress={handleLogin}
         >
           <Text style={styles.buttonText}>Login</Text>
         </Pressable>

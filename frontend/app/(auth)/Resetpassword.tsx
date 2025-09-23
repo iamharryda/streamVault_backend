@@ -7,28 +7,30 @@ import {
   ImageBackground,
 } from "react-native";
 import React, { useState } from "react";
-import { Link, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
+import axios from "axios";
 
 const resetpassword = () => {
   const router = useRouter();
 
-  const [password, setPassword] = useState<string>("");
+  const [newPassword, setPassword] = useState<string>("");
   const [passwordConfirm, setPasswordConfirm] = useState<string>("");
 
-  const [isChecked, setIsChecked] = React.useState(false);
-  const [isPressed, setIsPressed] = React.useState(false);
-
-  const checkPassword = (password: string, passwordConfirm: string): void => {
-    if (password !== passwordConfirm) {
-      console.log("Passwords do not match");
-    }
-    console.log("Passwords match");
-  };
-  const handleSubmit = () => {
+  const handlePasswordReset = async () => {
     try {
-      checkPassword(password, passwordConfirm);
-    } catch (error: any) {
-      console.log("Error:", error.message);
+      const response = await axios.post(
+        "http://localhost:5008/api/v1/auth/change-password",
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json", // explicitly tell backend this is JSON
+          },
+        }
+      );
+      router.push("/Login");
+      console.log(response);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -44,7 +46,7 @@ const resetpassword = () => {
           style={styles.input}
           placeholder="Enter a password"
           placeholderTextColor="#888"
-          value={password}
+          value={newPassword}
           onChangeText={setPassword}
           secureTextEntry
         />
@@ -62,9 +64,7 @@ const resetpassword = () => {
             styles.button,
             pressed && styles.buttonPressed,
           ]}
-          onPressIn={() => setIsPressed(true)}
-          onPressOut={() => setIsPressed(false)}
-          onPress={handleSubmit}
+          onPress={handlePasswordReset}
         >
           <Text style={styles.buttonText}>Set new password</Text>
         </Pressable>

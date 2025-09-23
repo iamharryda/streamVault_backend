@@ -6,13 +6,35 @@ import {
   TextInput,
   ImageBackground,
 } from "react-native";
-import React from "react";
-import { Link, useRouter } from "expo-router";
+import React, { useState } from "react";
+import { useRouter } from "expo-router";
+import axios from "axios";
 
 const fverification = () => {
   const router = useRouter();
-  const [isChecked, setIsChecked] = React.useState(false);
-  const [isPressed, setIsPressed] = React.useState(false);
+  const [code, setCode] = useState("");
+  const [email, setEmail] = useState("");
+
+  const ForgotVerification = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5008/api/v1/auth/verify-code", // for some reason this returns an error
+        {
+          email,
+          code,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json", // explicitly tell backend this is JSON
+          },
+        }
+      );
+      router.push("/ResetPassword");
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <ImageBackground
@@ -21,23 +43,32 @@ const fverification = () => {
       resizeMode="cover"
     >
       <View style={styles.container}>
+        <Text style={styles.title}>Enter your email</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your email"
+          keyboardType="email-address"
+          placeholderTextColor="#888"
+          value={email}
+          onChangeText={setEmail}
+        />
         <Text style={styles.title}>Enter your code</Text>
         <TextInput
           style={styles.input}
           placeholder="Enter your code"
           keyboardType="number-pad"
           placeholderTextColor="#888"
+          value={code}
+          onChangeText={setCode}
         />
         <Pressable
           style={({ pressed }) => [
             styles.button,
             pressed && styles.buttonPressed,
           ]}
-          onPressIn={() => setIsPressed(true)}
-          onPressOut={() => setIsPressed(false)}
-          onPress={() => {}}
+          onPress={ForgotVerification}
         >
-          <Text style={styles.buttonText}>Reset password</Text>
+          <Text style={styles.buttonText}>Verify Reset</Text>
         </Pressable>
         <View style={styles.footer}>
           <Text style={styles.footerText}>

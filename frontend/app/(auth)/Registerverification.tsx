@@ -6,13 +6,33 @@ import {
   TextInput,
   ImageBackground,
 } from "react-native";
-import React from "react";
-import { Link, useRouter } from "expo-router";
+import React, { useState } from "react";
+import { useRouter } from "expo-router";
+import axios from "axios";
 
 const rverification = () => {
+  const [code, setCode] = useState("");
   const router = useRouter();
-  const [isChecked, setIsChecked] = React.useState(false);
-  const [isPressed, setIsPressed] = React.useState(false);
+
+  const handleVerification = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5008/api/v1/auth/register/verify",
+        {
+          code,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json", // explicitly tell backend this is JSON
+          },
+        }
+      );
+      router.push("/Login");
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <ImageBackground
@@ -27,15 +47,15 @@ const rverification = () => {
           placeholder="Enter your code"
           keyboardType="number-pad"
           placeholderTextColor="#888"
+          value={code}
+          onChangeText={setCode}
         />
         <Pressable
           style={({ pressed }) => [
             styles.button,
             pressed && styles.buttonPressed,
           ]}
-          onPressIn={() => setIsPressed(true)}
-          onPressOut={() => setIsPressed(false)}
-          onPress={() => {}}
+          onPress={handleVerification}
         >
           <Text style={styles.buttonText}>Verify email</Text>
         </Pressable>
