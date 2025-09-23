@@ -12,7 +12,7 @@ import {
 } from "@expo-google-fonts/dm-sans";
 import { ActivityIndicator, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { SpecialTabButton } from "../../components/SpecialTabButton";
+import { SpecialTabButton } from "@/src/components/SpecialTabButton";
 import type { EventArg } from "@react-navigation/native";
 
 export default function Layout() {

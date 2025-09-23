@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { View, TextInput, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { searchMovies, searchTVShows } from '@/src/api/tmdb';
-import MovieCard from '@/components/MovieCard';
-import TVShowCard from '@/components/TVShowCard';
+import MovieCard from '@/src/components/MovieCard';
+import TVShowCard from '@/src/components/TVShowCard';
 import { useFonts as useInterFonts, Inter_700Bold, Inter_600SemiBold, Inter_500Medium } from "@expo-google-fonts/inter";
 
 export default function SearchScreen() {
