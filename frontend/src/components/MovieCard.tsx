@@ -13,7 +13,7 @@ export default function MovieCard({ poster_path, title, release_date, id }: Prop
         <Link href={`/movies/${id}` as any} asChild>
             <TouchableOpacity style={styles.container}>
                 <Image
-                    source={{ uri: poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : 'https://via.placeholder.com/500x750?text=No+Image' }}
+                    source={{ uri: poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : undefined }}
                     style={styles.poster}
                     resizeMode="cover"
                 />
