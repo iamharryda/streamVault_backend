@@ -29,3 +29,11 @@ export const searchMovies = async (query: string) => {
     });
     return response.data.results;
 };
+
+export const searchTVShows = async (query: string) => {
+    if (!query) return [];
+    const response = await tmdb.get('/search/tv', {
+        params: { query },
+    });
+    return response.data.results;
+};
