@@ -58,14 +58,9 @@ export default function Layout() {
         options={{
           title: "Home",
           tabBarLabel: "Home",
-          tabBarIcon: ({
-            color,
-            size,
-          }: {
-            color: string;
-            size: number;
-            focused: boolean;
-          }) => <Ionicons name="home" size={size} color={color} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
         }}
       />
       <Tabs.Screen
@@ -73,7 +68,7 @@ export default function Layout() {
         options={{
           title: "Discover",
           tabBarLabel: "Discover",
-          tabBarIcon: ({ color, size }: { color: string; size: number }) => (
+          tabBarIcon: ({ color, size }) => (
             <Ionicons name="compass" size={size} color={color} />
           ),
         }}
@@ -82,7 +77,7 @@ export default function Layout() {
         name="TabBarButton"
         options={{ tabBarButton: SpecialTabButton }}
         listeners={{
-          tabPress: (e: EventArg<'tabPress', true>) => {
+          tabPress: (e) => {
             e.preventDefault();
           },
         }}
@@ -92,7 +87,7 @@ export default function Layout() {
         options={{
           title: "My Review",
           tabBarLabel: "My Review",
-          tabBarIcon: ({ color, size }: {color: string ; size: number}) => (
+          tabBarIcon: ({ color, size }) => (
             <Ionicons name="star" size={size} color={color} />
           ),
         }}
@@ -102,7 +97,7 @@ export default function Layout() {
         options={{
           title: "Account",
           tabBarLabel: "Account",
-          tabBarIcon: ({ color, size }: {color: string; size: number}) => (
+          tabBarIcon: ({ color, size }) => (
             <Ionicons name="person" size={size} color={color} />
           ),
         }}

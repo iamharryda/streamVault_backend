@@ -1,14 +1,10 @@
 import {
   View,
   Text,
-  TouchableWithoutFeedback,
-  Keyboard,
   Pressable,
   StyleSheet,
   TextInput,
   ImageBackground,
-  TouchableOpacity,
-  Alert,
 } from "react-native";
 import React, { useState } from "react";
 import { Link, useRouter } from "expo-router";
