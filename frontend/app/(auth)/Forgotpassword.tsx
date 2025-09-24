@@ -9,6 +9,7 @@ import {
 import React, { useState } from "react";
 import { useRouter } from "expo-router";
 import axios from "axios";
+import styles from "./styles/VerificationStyles";
 
 const forgotpassword = () => {
   const router = useRouter();
@@ -27,7 +28,10 @@ const forgotpassword = () => {
           },
         }
       );
-      router.push("/ForgotVerification");
+      router.push({
+        pathname: "/ForgotVerification",
+        params: { email }, // Pass email as a search param
+      });
       console.log(response);
     } catch (err) {
       console.log(err);
@@ -72,65 +76,4 @@ const forgotpassword = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  background: {
-    flex: 1,
-    width: "100%",
-    height: "100%",
-  },
-  container: {
-    alignItems: "center",
-    marginTop: "25%",
-  },
-  title: {
-    color: "#FFC107",
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-  input: {
-    backgroundColor: "#FFC107",
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#000",
-    width: "80%",
-    padding: 10,
-    marginVertical: 10,
-    fontSize: 16,
-    color: "#000",
-  },
-  button: {
-    backgroundColor: "#FFC107",
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#000",
-    width: "80%",
-    padding: 12,
-    marginTop: 50,
-    alignItems: "center",
-  },
-  buttonPressed: {
-    backgroundColor: "#FFC107",
-    opacity: 0.8,
-  },
-  buttonText: {
-    color: "#000",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  footer: {
-    marginTop: 15,
-    width: "80%",
-    alignItems: "center",
-  },
-  footerText: {
-    color: "#FFC107",
-    fontSize: 16,
-  },
-  registerLink: {
-    color: "#FFC107",
-    textDecorationLine: "underline",
-    fontWeight: "bold",
-  },
-});
 export default forgotpassword;
