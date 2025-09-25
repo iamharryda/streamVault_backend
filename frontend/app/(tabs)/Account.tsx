@@ -94,7 +94,7 @@ export default function AccountScreen() {
       setError(null);
 
       const profileResponse = await axios.get<IUserProfile>(
-        "/api/user/profile"
+        "http://10.0.2.2:5000/api/user/profile"
       );
       setProfile(profileResponse.data);
     } catch (err) {
