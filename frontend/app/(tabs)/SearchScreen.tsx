@@ -5,22 +5,17 @@ import { searchMovies, searchTVShows } from '@/src/api/tmdb';
 import MovieCard from '@/src/components/MovieCard';
 import TVShowCard from '@/src/components/TVShowCard';
 import { useFonts as useInterFonts, Inter_700Bold, Inter_600SemiBold, Inter_500Medium } from "@expo-google-fonts/inter";
+import { useRouter } from 'expo-router';
 
 export default function SearchScreen() {
   useInterFonts({ Inter_700Bold, Inter_600SemiBold, Inter_500Medium });
+  const router = useRouter();
 
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<any[]>([]);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const [selectedType, setSelectedType] = useState<'Movie' | 'TV Show'>('Movie');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  const exists = recentSearches.some(
-    search => search.toLowerCase() === query.toLowerCase()
-  );
-  if (query && !exists) {
-    recentSearches.unshift(query);
-  }
 
   const clearRecentSearches = () => {
     setRecentSearches([]);
@@ -50,20 +45,27 @@ export default function SearchScreen() {
           ? await searchMovies(query)
           : await searchTVShows(query);
         setResults(results);
+
+        setRecentSearches(prev => {
+          if (!prev.some(search => search.toLowerCase() === query.toLowerCase())) {
+            return [query, ...prev].slice(0, 10); // Keep only the latest 10 searches
+          }
+          return prev;
+        })
       } else {
         setResults([]);
       }
-    }, 500); // Debounce for 500ms
+    }, 1000); // Debounce for 1000ms
 
     return () => clearTimeout(handleTimeout);
-  }, [query]);
+  }, [query, selectedType]);
 
   return (
 
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="close" size={24} color="#B1B8B9" style={{ paddingHorizontal: 16, paddingVertical: 23 }} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Add a movie or tv show</Text>
@@ -173,19 +175,6 @@ export default function SearchScreen() {
 }
 
 const styles = StyleSheet.create({
-  // container: {
-  //   flex: 1,
-  //   backgroundColor: "#04191E",
-  //   padding: 16,
-  // },
-  // input: {
-  //   backgroundColor: "#1b263b",
-  //   color: "white",
-  //   borderRadius: 12,
-  //   paddingHorizontal: 12,
-  //   paddingVertical: 8,
-  //   marginBottom: 16,
-  // },
   container: {
     flex: 1,
     backgroundColor: '#04191E',

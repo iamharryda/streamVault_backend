@@ -34,3 +34,15 @@ export const searchTVShows = async (query: string) => {
     });
     return response.data.results;
 };
+
+export const getMovieDetails = async (id: number) => {
+    const response = await tmdb.get(`movie/${id}`, {
+        params: { append_to_response: 'credits,videos,reviews' },
+    });
+    return response.data;
+};
+
+export const getPopularMovies = async () => {
+    const response = await tmdb.get('/movie/popular');
+    return response.data.results;
+};
