@@ -10,7 +10,7 @@ type Props = {
 
 export default function MovieCard({ poster_path, title, release_date, id }: Props) {
     return (
-        <Link href={`/movies/${id}` as any} asChild>
+        <Link href={`../movies/${id}`} asChild>
             <TouchableOpacity style={styles.container}>
                 <Image
                     source={{ uri: poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : undefined }}
