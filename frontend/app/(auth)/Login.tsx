@@ -11,6 +11,7 @@ import React, { useState } from "react";
 import { useRouter } from "expo-router";
 import axios from "axios";
 import styles from "./styles/LoginStyles";
+import RandomImageBackground from "./components/ImageSelect";
 
 const login = () => {
   const router = useRouter();
@@ -43,11 +44,7 @@ const login = () => {
   };
 
   return (
-    <ImageBackground
-      source={require("../../assets/images/jokerimage.png")}
-      style={styles.background}
-      resizeMode="cover"
-    >
+    <RandomImageBackground>
       <View style={styles.container}>
         <Text style={styles.title}>Log in</Text>
         <TextInput
@@ -107,7 +104,7 @@ const login = () => {
           </Text>
         </View>
       </View>
-    </ImageBackground>
+    </RandomImageBackground>
   );
 };
 

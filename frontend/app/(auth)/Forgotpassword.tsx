@@ -10,6 +10,7 @@ import React, { useState } from "react";
 import { useRouter } from "expo-router";
 import axios from "axios";
 import styles from "./styles/VerificationStyles";
+import RandomImageBackground from "./components/ImageSelect";
 
 const forgotpassword = () => {
   const router = useRouter();
@@ -39,11 +40,7 @@ const forgotpassword = () => {
   };
 
   return (
-    <ImageBackground
-      source={require("../../assets/images/jokerimage.png")}
-      style={styles.background}
-      resizeMode="cover"
-    >
+    <RandomImageBackground>
       <View style={styles.container}>
         <Text style={styles.title}>Enter your email</Text>
         <TextInput
@@ -72,7 +69,7 @@ const forgotpassword = () => {
           </Text>
         </View>
       </View>
-    </ImageBackground>
+    </RandomImageBackground>
   );
 };
 

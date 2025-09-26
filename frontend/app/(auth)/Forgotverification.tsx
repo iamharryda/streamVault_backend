@@ -10,6 +10,7 @@ import React, { useState } from "react";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import axios from "axios";
 import styles from "./styles/VerificationStyles";
+import RandomImageBackground from "./components/ImageSelect";
 
 const fverification = () => {
   const router = useRouter();
@@ -41,11 +42,7 @@ const fverification = () => {
   };
 
   return (
-    <ImageBackground
-      source={require("../../assets/images/jokerimage.png")}
-      style={styles.background}
-      resizeMode="cover"
-    >
+    <RandomImageBackground>
       <View style={styles.container}>
         <Text style={styles.title}>Enter your code</Text>
         <TextInput
@@ -74,7 +71,7 @@ const fverification = () => {
           </Text>
         </View>
       </View>
-    </ImageBackground>
+    </RandomImageBackground>
   );
 };
 

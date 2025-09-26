@@ -12,6 +12,7 @@ import React, { useState } from "react";
 import { useRouter } from "expo-router";
 import axios from "axios";
 import styles from "./styles/RegisterStyles";
+import RandomImageBackground from "./components/ImageSelect";
 
 const register = () => {
   const router = useRouter();
@@ -79,11 +80,7 @@ const register = () => {
     }
   };
   return (
-    <ImageBackground
-      source={require("../../assets/images/jokerimage.png")}
-      style={styles.background}
-      resizeMode="cover"
-    >
+    <RandomImageBackground>
       <View style={styles.container}>
         <Text style={styles.title}>Create an account</Text>
         <TextInput
@@ -123,7 +120,7 @@ const register = () => {
           />
           <Text style={styles.switchLabel}>
             I’m 16+ years old and accept{" "}
-            <Text style={styles.link} onPress={() => router.push("./register")}>
+            <Text style={styles.link} onPress={() => router.push("./Register")}>
               Terms of Use
             </Text>
           </Text>
@@ -164,7 +161,7 @@ const register = () => {
           </Text>
         </View>
       </View>
-    </ImageBackground>
+    </RandomImageBackground>
   );
 };
 

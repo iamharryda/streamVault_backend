@@ -10,6 +10,7 @@ import React, { useState } from "react";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import axios from "axios";
 import styles from "./styles/VerificationStyles";
+import RandomImageBackground from "./components/ImageSelect";
 
 const rverification = () => {
   const [otp, setOtp] = useState("");
@@ -38,11 +39,7 @@ const rverification = () => {
   };
 
   return (
-    <ImageBackground
-      source={require("../../assets/images/jokerimage.png")}
-      style={styles.background}
-      resizeMode="cover"
-    >
+    <RandomImageBackground>
       <View style={styles.container}>
         <Text style={styles.title}>Verifify your email</Text>
         <TextInput
@@ -71,7 +68,7 @@ const rverification = () => {
           </Text>
         </View>
       </View>
-    </ImageBackground>
+    </RandomImageBackground>
   );
 };
 
