@@ -1,12 +1,5 @@
 import { ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import MovieSection from "@/src/components/MovieSection";
-import { getPopularMovies } from "@/src/api/tmdb";
-import { useEffect, useState } from "react";
-import { useRouter } from "expo-router";
-import SearchButton from "@/src/components/SearchButton";
-import { IMovie } from "@/src/types/interfaces/IMovie";
-
 
 export default function HomePage() {
   const router = useRouter();
