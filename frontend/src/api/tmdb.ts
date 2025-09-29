@@ -1,8 +1,5 @@
 import axios from 'axios'
-
-const TMDB_API_KEY = "2f6531a3d1376fd31f2ca77f9e45c724";
-
-const BASE_URL = 'https://api.themoviedb.org/3';
+import { TMDB_API_KEY, BASE_URL } from '@env';
 
 const tmdb = axios.create({
     baseURL: BASE_URL,
@@ -35,5 +32,17 @@ export const searchTVShows = async (query: string) => {
     const response = await tmdb.get('/search/tv', {
         params: { query },
     });
+    return response.data.results;
+};
+
+export const getMovieDetails = async (id: number) => {
+    const response = await tmdb.get(`movie/${id}`, {
+        params: { append_to_response: 'credits,videos,reviews' },
+    });
+    return response.data;
+};
+
+export const getPopularMovies = async () => {
+    const response = await tmdb.get('/movie/popular');
     return response.data.results;
 };

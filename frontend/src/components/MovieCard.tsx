@@ -1,16 +1,12 @@
 import { Link } from "expo-router";
 import { Image, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { IMovie } from "../types/interfaces/IMovie";
 
-type Props = {
-    poster_path: string;
-    title: string;
-    release_date: string;
-    id: number;
-};
 
-export default function MovieCard({ poster_path, title, release_date, id }: Props) {
+
+export default function MovieCard({ poster_path, title, release_date, id }: IMovie) {
     return (
-        <Link href={`/movies/${id}` as any} asChild>
+        <Link href={`../movies/${id}`} asChild>
             <TouchableOpacity style={styles.container}>
                 <Image
                     source={{ uri: poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : undefined }}
