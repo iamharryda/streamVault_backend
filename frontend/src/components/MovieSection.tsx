@@ -1,20 +1,16 @@
 import React from "react";
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from "react-native";
 import MovieCard from "./MovieCard";
+import { IMovie } from "../types/interfaces/IMovie";
 
-type Movie = {
-  id: number;
-  poster_path: string;
-  title: string;
-  release_date: string;
-};
 
-type Props = {
+
+type MovieSectionProps = {
   sectionTitle: string;
-  movies: Movie[];
+  movies: IMovie[];
 };
 
-export default function MovieSection({ sectionTitle, movies }: Props) {
+export default function MovieSection({ sectionTitle, movies }: MovieSectionProps) {
   return (
     <View style={styles.container}>
       {/* Header */}

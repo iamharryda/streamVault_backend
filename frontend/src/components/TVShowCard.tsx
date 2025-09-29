@@ -1,14 +1,8 @@
 import { Link } from "expo-router";
 import { Image, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { ITvShow } from "../types/interfaces/ITvShow";
 
-type Props = {
-    poster_path: string;
-    name: string;
-    first_air_date: string;
-    id: number;
-};
-
-export default function TVShowCard({ poster_path, name, first_air_date, id }: Props) {
+export default function TVShowCard({ poster_path, name, first_air_date, id }: ITvShow) {
     return (
         <Link href={`/tv/${id}` as any} asChild>
             <TouchableOpacity style={styles.container}>
