@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IUserProfile } from "@/src/types/interfaces/iUser";
+import { IUser} from "@/src/types/interfaces/iUser";
 
-const initialState: IUserProfile = {
+const initialState: IUser = {
+  id: null,
   name: "Guest",
   username: "guest",
   avatar: null,
@@ -11,14 +12,14 @@ const initialState: IUserProfile = {
     watchlist: 0,
     favorites: 0,
   },
+  isLogined: false,
 };
-
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<IUserProfile>) => {
+    setUser: (state, action: PayloadAction<IUser>) => {
       state.name = action.payload.name;
       state.avatar = action.payload.avatar;
     },

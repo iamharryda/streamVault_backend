@@ -15,7 +15,7 @@ import {
 import { Ionicons, MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
-import { IUserProfile } from "@/src/types/interfaces/iUser";
+import { IUser } from "@/src/types/interfaces/iUser";
 
 const STAT_ICONS = {
   ratings: require("../../assets/icons/Ratings.png"),
@@ -85,7 +85,7 @@ export default function AccountScreen() {
   const [loading, setLoading] = useState(true);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [profile, setProfile] = useState<IUserProfile | null>(null);
+  const [profile, setProfile] = useState<IUser | null>(null);
 
   // Fetch user profile from API
   const fetchProfileData = async () => {
@@ -93,15 +93,16 @@ export default function AccountScreen() {
       setLoading(true);
       setError(null);
 
-      const profileResponse = await axios.get<IUserProfile>(
+      const profileResponse = await axios.get<IUser>(
         "http://10.0.2.2:5000/api/user/profile"
       );
       setProfile(profileResponse.data);
     } catch (err) {
       console.error("Error fetching profile data:", err);
 
-      // Mock data for development/demo purposes
+      
       setProfile({
+        id: null,
         name: "Jane Doe",
         username: "@jane_doe",
         avatar: "https://i.pravatar.cc/300",
@@ -111,6 +112,7 @@ export default function AccountScreen() {
           watchlist: 89,
           favorites: 67,
         },
+        isLogined: true,
       });
 
       // setError(axios.isAxiosError(err) ? err.message : 'Unknown error occurred');
