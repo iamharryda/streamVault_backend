@@ -7,6 +7,7 @@ class CommentController {
     try {
       const comment = await CommentService.createComment({
         ...req.body,
+        postId: req.params.postId,
         userId: req.user._id, // requires auth
       });
       generateResponse(res, 201, true, "Comment created successfully", comment);

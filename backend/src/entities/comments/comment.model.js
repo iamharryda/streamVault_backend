@@ -20,11 +20,21 @@ const commentSchema = new Schema(
     dislikeCount: { type: Number, default: 0 },
 
     isEdited: { type: Boolean, default: false },
-    isDeleted: { type: Boolean, default: false },
     editedAt: { type: Date, default: null },
   },
   { timestamps: true }
 );
+//  Virtual populate for replies
+commentSchema.virtual("replies", {
+  ref: "Comment",
+  localField: "_id",
+  foreignField: "parentCommentId",
+});
+
+// Ensure virtuals are included in JSON
+commentSchema.set("toJSON", { virtuals: true });
+commentSchema.set("toObject", { virtuals: true });
+
 
 // ✅ Prevent replies to replies
 commentSchema.pre("save", async function (next) {

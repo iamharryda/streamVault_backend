@@ -1,12 +1,12 @@
 import express from "express";
 import CommentController from "./comment.controller.js";
-// const { verifyToken } = require("../../core/middlewares/authMiddleware"); // if you use JWT
-// const authMiddleware = require("../middleware/auth"); // enable when ready
+import { verifyToken } from "../../core/middlewares/authMiddleware.js";
+
 
 const router = express.Router();
 
 // Create comment/reply
-router.post("/:postId", /*authMiddleware,*/ CommentController.createComment);
+router.post("/:postId", verifyToken, CommentController.createComment);
 
 // Get all comments for a post
 router.get("/:postId", CommentController.getCommentsByPost);
@@ -15,13 +15,13 @@ router.get("/:postId", CommentController.getCommentsByPost);
 router.get("/replies/:commentId", CommentController.getReplies);
 
 // Update comment
-router.put("/:commentId", /*authMiddleware,*/ CommentController.updateComment);
+router.put("/:commentId", verifyToken,CommentController.updateComment);
 
 // Delete comment
-router.delete("/:commentId", /*authMiddleware,*/ CommentController.deleteComment);
+router.delete("/:commentId", verifyToken, CommentController.deleteComment);
 
 // Reactions
-router.post("/:commentId/react", /*authMiddleware,*/ CommentController.addReaction);
-router.delete("/:commentId/react", /*authMiddleware,*/ CommentController.removeReaction);
+router.post("/:commentId/react", verifyToken, CommentController.addReaction);
+router.delete("/:commentId/react", verifyToken, CommentController.removeReaction);
 
 export default router;

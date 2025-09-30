@@ -8,40 +8,52 @@ import {accessTokenSecrete,emailExpires, accessTokenExpires, refreshTokenSecrete
 export const initiateRegisterUserService = async ({ name, phoneNumber, email, password }) => {
   const existingUser = await User.findOne({ email });
 
+  // Generate OTP and expiry
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  const otpExpires = new Date(Date.now() + 10 * 60 * 1000); 
+  const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+
+  let message = "";
 
   if (existingUser) {
     if (existingUser.isVerified) {
-      throw new Error('User already verified');
+      throw new Error("User already verified");
     }
 
-    // User exists but not verified → update OTP
+    // User exists but not verified → update OTP & resend
     existingUser.otp = otp;
     existingUser.otpExpires = otpExpires;
     existingUser.name = name; 
     existingUser.phoneNumber = phoneNumber;
     existingUser.password = password; 
     await existingUser.save();
-  } 
-  else {
+
+    message = "User already exists, OTP sent to your mail";
+  } else {
+    
     const newUser = new User({
       name,
       phoneNumber,
       email,
-      password,
+      password, 
       otp,
-      otpExpires
+      otpExpires,
+      isVerified: false,
     });
     await newUser.save();
+
+    message = "User created successfully, OTP sent to your mail";
   }
 
+  // Send OTP email
   await sendEmail({
     to: email,
-    subject: 'Your OTP Code',
-    html: `<p>Your verification code is: <strong>${otp}</strong></p>`
+    subject: "Your OTP Code",
+    html: `<p>Your verification code is: <strong>${otp}</strong></p>`,
   });
+
+  return { success: true, message };
 };
+
 
 
 export const verifyRegisterOTPService = async (email, otp) => {

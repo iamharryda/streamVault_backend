@@ -16,16 +16,24 @@ import {
 export const initiateRegisterUser = async (req, res, next) => {
   try {
     const { name, phoneNumber, email, password } = req.body;
-    await initiateRegisterUserService({ name, phoneNumber, email, password });
-    generateResponse(res, 200, true, 'OTP sent to email', null);
+
+    const result = await initiateRegisterUserService({
+      name,
+      phoneNumber,
+      email,
+      password,
+    });
+
+    generateResponse(res, 200, true, result.message, null);
   } catch (error) {
-    if (error.message === 'User already verified') {
-      generateResponse(res, 400, false, 'User already registered.', null);
+    if (error.message === "User already verified") {
+      generateResponse(res, 400, false, "User already registered.", null);
     } else {
       next(error);
     }
   }
 };
+
 
 
 export const verifyRegisterOTP = async (req, res, next) => {
