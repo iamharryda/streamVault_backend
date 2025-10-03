@@ -12,6 +12,7 @@ import { useRouter } from "expo-router";
 import axios from "axios";
 import styles from "./styles/LoginStyles";
 import RandomImageBackground from "./components/ImageSelect";
+import { login as apiLogin } from "@/src/api/serverRequests/authRequests";
 
 const login = () => {
   const router = useRouter();
@@ -24,20 +25,9 @@ const login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post(
-        "http://localhost:5008/api/v1/auth/login",
-        {
-          email,
-          password,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json", // explicitly tell backend this is JSON
-          },
-        }
-      );
-      router.push("/(tabs)/Account");
-      console.log(response);
+      const loginData = await apiLogin(email, password);
+      console.log("Login data:", loginData);
+      router.push("/Account");
     } catch (err) {
       console.log(err);
     }

@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IUserProfile } from "@/src/types/interfaces/iUser";
+import { IUser } from "@/src/types/interfaces/iUser";
 
-const initialState: IUserProfile = {
+const initialState: IUser = {
+  id: null,
   name: "Guest",
   username: "guest",
   avatar: null,
@@ -11,23 +12,34 @@ const initialState: IUserProfile = {
     watchlist: 0,
     favorites: 0,
   },
+  isLogined: false,
 };
-
 
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<IUserProfile>) => {
-      state.name = action.payload.name;
-      state.avatar = action.payload.avatar;
+    // Set the user state with partial data
+    setUser: (state, action: PayloadAction<Partial<IUser>>) => {
+      Object.assign(state, action.payload);
     },
-    clearUser: (state) => {
-      state.name = "Guest";
-      state.avatar = null;
+
+    // Update a specific field of the user
+    updateUserField: <K extends keyof IUser>(
+      state: IUser,
+      action: PayloadAction<{ field: K; value: IUser[K] }>
+    ) => {
+      state[action.payload.field] = action.payload.value;
     },
+
+    // Log in the user
+    login: (state) => {
+      state.isLogined = true;
+    },
+    // Log out and reset to initial state
+    logout: () => initialState,
   },
 });
 
-export const { setUser, clearUser } = userSlice.actions;
+export const { setUser, updateUserField, login, logout } = userSlice.actions;
 export default userSlice.reducer;

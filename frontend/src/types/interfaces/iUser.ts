@@ -1,4 +1,5 @@
-export interface IUserProfile {
+export interface IUser {
+  id: string | null;
   name: string;
   username: string;
   avatar: string | null;
@@ -8,4 +9,10 @@ export interface IUserProfile {
     watchlist: number;
     favorites: number;
   };
+  isLogined: boolean;
 }
+type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
+};
+
+export type IUserUpdate = DeepPartial<IUser>;
