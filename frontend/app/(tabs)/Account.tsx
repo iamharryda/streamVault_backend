@@ -16,7 +16,11 @@ import { Ionicons, MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { IUser } from "@/src/types/interfaces/iUser";
+import { useSelector } from "react-redux";
+import { RootState } from "@/src/store/store";
+import { useRouter } from "expo-router";
 
+// Icons for user stats
 const STAT_ICONS = {
   ratings: require("../../assets/icons/Ratings.png"),
   reviews: require("../../assets/icons/Reviews.png"),
@@ -32,13 +36,8 @@ interface Stat {
   value: number;
 }
 
-interface MenuItem {
-  key: string;
-  icon: string;
-  label: string;
-}
-
-const MENU: MenuItem[] = [
+// Menu items for the account page
+const MENU = [
   { key: "myreviews", icon: "pencil-outline", label: "My Reviews" },
   { key: "watchlist", icon: "monitor", label: "Watchlist" },
   { key: "favorites", icon: "heart", label: "Favorites" },
@@ -86,6 +85,11 @@ export default function AccountScreen() {
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [profile, setProfile] = useState<IUser | null>(null);
+  const router = useRouter();
+
+  // Get user state from Redux
+    const isLogined = useSelector((state: RootState) => state.user.isLogined);
+
 
   // Fetch user profile from API
   const fetchProfileData = async () => {
@@ -100,7 +104,7 @@ export default function AccountScreen() {
     } catch (err) {
       console.error("Error fetching profile data:", err);
 
-      
+      // Demo fallback
       setProfile({
         id: null,
         name: "Jane Doe",
@@ -114,14 +118,11 @@ export default function AccountScreen() {
         },
         isLogined: true,
       });
-
-      // setError(axios.isAxiosError(err) ? err.message : 'Unknown error occurred');
     } finally {
-      // Small delay for better skeleton loader UX
       setTimeout(() => setLoading(false), 0);
     }
   };
-
+console.log(isLogined)
   // Pick image from gallery and upload as avatar
   const handleAvatarPress = async () => {
     try {
@@ -157,15 +158,13 @@ export default function AccountScreen() {
     try {
       setUploadingAvatar(true);
 
-      // Create FormData for file upload
       const formData = new FormData();
       formData.append("avatar", {
         uri: imageUri,
-        type: "image/jpeg", // required by server
-        name: "avatar.jpg", // arbitrary file name
+        type: "image/jpeg",
+        name: "avatar.jpg",
       } as unknown as Blob);
 
-      // Send to mock server
       const response = await axios.post(
         "base_url/user/upload-avatar",
         formData,
@@ -176,17 +175,15 @@ export default function AccountScreen() {
         }
       );
 
-      // Update profile with new avatar
       if (profile) {
         setProfile({
           ...profile,
-          avatar: response.data.avatarUrl || imageUri, // fallback to local URI if server doesn't return one
+          avatar: response.data.avatarUrl || imageUri,
         });
       }
     } catch (error) {
       console.error("Error uploading avatar:", error);
 
-      // Fallback: update avatar locally in demo mode
       if (profile) {
         setProfile({
           ...profile,
@@ -226,6 +223,35 @@ export default function AccountScreen() {
       ]
     : [];
 
+  // If user is not logged in → show login/register UI
+  if (!isLogined) {
+    return (
+      <SafeAreaView style={styles.safe}>
+        <View style={styles.centerContainer}>
+          <TouchableOpacity
+            style={styles.fullWidthBtn}
+            onPress={() => router.push("/Login")} 
+          >
+            <Text style={styles.fullWidthBtnText}>Login</Text>
+          </TouchableOpacity>
+
+          <View style={styles.orContainer}>
+            <View style={styles.orLine} />
+            <Text style={styles.orText}>OR</Text>
+            <View style={styles.orLine} />
+          </View>
+
+          <TouchableOpacity
+            style={styles.fullWidthBtn}
+            onPress={() => router.push("/Register")}
+          >
+            <Text style={styles.fullWidthBtnText}>Create Account</Text>
+          </TouchableOpacity>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar barStyle="light-content" />
@@ -243,7 +269,10 @@ export default function AccountScreen() {
         ) : profile ? (
           <>
             <View style={styles.avatarWrap}>
-              <Image source={{ uri: profile.avatar || " "}} style={styles.avatar} />
+              <Image
+                source={{ uri: profile.avatar || " " }}
+                style={styles.avatar}
+              />
               <TouchableOpacity
                 style={styles.addIcon}
                 activeOpacity={0.8}
@@ -324,7 +353,6 @@ export default function AccountScreen() {
     </SafeAreaView>
   );
 }
-
 
 const styles = StyleSheet.create({
   safe: {
@@ -517,5 +545,45 @@ const styles = StyleSheet.create({
   retryButtonText: {
     color: "#052426",
     fontWeight: "600",
+  },
+
+  // Auth buttons (Login / Register)
+  centerContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 24,
+  },
+  fullWidthBtn: {
+    width: "100%",
+    backgroundColor: "#FFD24A",
+    paddingVertical: 14,
+    borderRadius: 8,
+    marginVertical: 10,
+    alignItems: "center",
+  },
+  fullWidthBtnText: {
+    color: "#052426",
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  orContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 10,
+    width: "100%",
+    justifyContent: "center",
+  },
+  orLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: "#9FBDB9",
+    opacity: 0.4,
+  },
+  orText: {
+    color: "#B1B8B9",
+    fontSize: 16,
+    fontWeight: "600",
+    marginHorizontal: 8,
   },
 });

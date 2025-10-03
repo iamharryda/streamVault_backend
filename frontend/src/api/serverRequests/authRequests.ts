@@ -1,8 +1,10 @@
+import { setUser } from "@/src/store/slices/userSlice";
+import { store } from "@/src/store/store";
 import axios from "axios";
 import * as SecureStore from "expo-secure-store";
+import * as storage from "@/src/utils/secureStoreUtil";
 
 const API_URL = "http://localhost:5008/api/v1/auth";
-
 // Public instance: no Authorization header added automatically
 const publicAuthRequests = axios.create({
   baseURL: API_URL,
@@ -61,14 +63,36 @@ export const login = async (email: string, password: string) => {
       email,
       password,
     });
-    const loginData = response.data.data;
+    const loginData = response.data?.data;
 
-    // Save tokens in SecureStore
-    await SecureStore.setItemAsync("accessToken", loginData.accessToken);
-    await SecureStore.setItemAsync("refreshToken", loginData.user.refreshToken);
+    if (!loginData) {
+      throw new Error("Login response missing data");
+    }
 
+    // Save tokens using platform-appropriate storage wrapper (localStorage on web, SecureStore on native)
+    if (loginData.accessToken) {
+      await storage.setItem("accessToken", loginData.accessToken);
+    }
+    if (loginData.user?.refreshToken) {
+      await storage.setItem("refreshToken", loginData.user.refreshToken);
+    }
+
+    // update redux store for immediate UI updates
+    store.dispatch(
+      setUser({
+        id: loginData.user.id,
+        name: loginData.user.name,
+        username: loginData.user.username,
+        avatar: loginData.user.avatar,
+        userStats: loginData.user.userStats,
+        isLogined: true,
+      })
+    );
+
+    return loginData;
   } catch (err: any) {
-    throw err.response?.data || err.message;
+    // normalize error
+    throw err?.response?.data ?? err?.message ?? err;
   }
 };
 

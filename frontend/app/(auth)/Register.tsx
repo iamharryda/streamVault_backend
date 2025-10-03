@@ -9,12 +9,9 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useRouter } from "expo-router";
-import axios from "axios";
-import * as SecureStore from "expo-secure-store";
 import RandomImageBackground from "./components/ImageSelect";
 import { StyleSheet } from "react-native";
-
-const API_URL = "http://localhost:5008/api/v1/auth";
+import { registerInit, verifyOtp as apiVerifyOtp, login as apiLogin } from "@/src/api/serverRequests/authRequests"
 
 const Register = () => {
   const router = useRouter();
@@ -27,14 +24,6 @@ const Register = () => {
 
   const [otpModalVisible, setOtpModalVisible] = useState(false);
   const [otp, setOtp] = useState("");
-
-  const saveToken = async (key: string, value: string) => {
-    try {
-      await SecureStore.setItemAsync(key, value);
-    } catch (e) {
-      console.log("Error saving token:", e);
-    }
-  };
 
   const handleRegister = async () => {
     if (!email || !password || !name) {
@@ -51,48 +40,27 @@ const Register = () => {
     }
 
     try {
-      console.log("Attempting registration...");
-      await axios.post(`${API_URL}/register/init`, {
-        name,
-        phoneNumber: "1234567890",
-        email,
-        password,
-      });
+      await registerInit(name, email, password, "1234567890");
 
-      console.log("Registration successful. Awaiting OTP...");
       setOtpModalVisible(true);
     } catch (err: any) {
-      console.log("Registration error:", err.response?.data || err.message);
+      console.log("Registration error:", err?.response?.data || err?.message || err);
     }
   };
 
   const handleVerifyOtp = async () => {
     try {
-      const verifyResponse = await axios.post(`${API_URL}/register/verify`, {
-        email,
-        otp,
-      });
+      const verifyResponse = await apiVerifyOtp(email, otp);
+      console.log("OTP verified:", verifyResponse);
 
-      console.log("OTP verified:", verifyResponse.data);
+      const loginData = await apiLogin(email, password);
 
-      const loginResponse = await axios.post(`${API_URL}/login`, {
-        email,
-        password,
-      });
-      const loginData = loginResponse.data.data;
-      const accessToken = loginData.accessToken;
-      const refreshToken = loginData.user.refreshToken;
+      console.log("Login data:", loginData);
 
-      await saveToken("accessToken", accessToken);
-      await saveToken("refreshToken", refreshToken);
-
-      console.log(accessToken, refreshToken);
-
-      console.log("Tokens saved, navigating to account...");
       setOtpModalVisible(false);
       router.push("/Account");
     } catch (err: any) {
-      console.log("OTP verification error:", err.response?.data || err.message);
+      console.log("OTP verification error:", err?.response?.data || err?.message || err);
     }
   };
 
@@ -204,6 +172,7 @@ const Register = () => {
 };
 
 export default Register;
+
 const styles = StyleSheet.create({
   background: {
     flex: 1,
