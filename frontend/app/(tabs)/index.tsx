@@ -1,7 +1,6 @@
 import { Text, StyleSheet, View, TouchableOpacity, Image, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MovieSection from "@/src/components/MovieSection";
-import MovieCard from "@/src/components/MovieCard";
 import { getPopularMovies } from "@/src/api/tmdb";
 import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
