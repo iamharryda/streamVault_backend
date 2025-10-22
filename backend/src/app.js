@@ -51,6 +51,19 @@ export const io = new Server(server, {
   },
 });
 
+// Handle socket connections
+io.on("connection", (socket) => {
+  const userId = socket.handshake.query.userId;
+  if (userId) {
+    socket.join(userId); // each user gets their own room
+    console.log(`User ${userId} connected via WebSocket`);
+  }
+
+  socket.on("disconnect", () => {
+    console.log("User disconnected:", userId);
+  });
+});
+
 
 
 // Set up logging middleware
