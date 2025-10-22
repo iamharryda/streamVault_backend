@@ -1,10 +1,12 @@
-import axios from 'axios'
-import { TMDB_API_KEY, BASE_URL } from '@env';
+import axios from 'axios';
+
+const tmdbApiKey = process.env.EXPO_PUBLIC_TMDB_API_KEY;
+const baseURL = process.env.EXPO_PUBLIC_BASE_URL || 'https://api.themoviedb.org/3';
 
 const tmdb = axios.create({
-    baseURL: BASE_URL,
+    baseURL: baseURL,
     params: {
-        api_key: TMDB_API_KEY,
+        api_key: tmdbApiKey,
         language: 'en-US',
     },
 });
@@ -37,6 +39,13 @@ export const searchTVShows = async (query: string) => {
 
 export const getMovieDetails = async (id: number) => {
     const response = await tmdb.get(`movie/${id}`, {
+        params: { append_to_response: 'credits,videos,reviews' },
+    });
+    return response.data;
+};
+
+export const getTVShowDetails = async (id: number) => {
+    const response = await tmdb.get(`tv/${id}`, {
         params: { append_to_response: 'credits,videos,reviews' },
     });
     return response.data;

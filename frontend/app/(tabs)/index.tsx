@@ -1,3 +1,5 @@
+import { Text, StyleSheet, View, TouchableOpacity, Image, ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { getPopularMovies } from "@/src/api/tmdb";
 import MovieSection from "@/src/components/MovieSection";
 import SearchButton from "@/src/components/SearchButton";

@@ -4,6 +4,7 @@ import { getMovieDetails } from '@/src/api/tmdb';
 import { useLocalSearchParams } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import RatingBreakdown from '@/src/components/RatingBreakdown';
 
 export default function MovieDetails() {
     const { id } = useLocalSearchParams<{ id: string }>();
@@ -111,6 +112,11 @@ export default function MovieDetails() {
                     />
                 </>
             )}
+
+            <RatingBreakdown
+                voteAverage={movie.vote_average}
+                voteCount={movie.vote_count}
+            />
         </View>
 
     </ScrollView>
