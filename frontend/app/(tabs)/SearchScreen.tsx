@@ -150,9 +150,9 @@ export default function SearchScreen() {
         // Search Results
         <FlatList
           data={results}
-          keyExtractor={(item) => `${item.media_type}-${item.id}`}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            item.media_type === 'tv' ? (
+            selectedType === 'TV Show' ? (
               <TVShowCard
                 poster_path={item.poster_path}
                 name={item.name}

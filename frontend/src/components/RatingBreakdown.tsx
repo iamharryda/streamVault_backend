@@ -3,19 +3,19 @@ import { View, Text, StyleSheet } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 
 type Props = {
-  voteAverage: number;
-  voteCount: number;
+  vote_average: number;
+  vote_count: number;
 };
 
-export default function RatingBreakdown({ voteAverage, voteCount }: Props) {
-  const stars = (voteAverage / 2).toFixed(1);
+export default function RatingBreakdown({ vote_average, vote_count }: Props) {
+  const stars = (vote_average / 2).toFixed(1);
 
   const distribution = {
-    5: Math.round(voteCount * 0.5),
-    4: Math.round(voteCount * 0.3),
-    3: Math.round(voteCount * 0.15),
-    2: Math.round(voteCount * 0.04),
-    1: Math.round(voteCount * 0.01),
+    5: Math.round(vote_count * 0.5),
+    4: Math.round(vote_count * 0.3),
+    3: Math.round(vote_count * 0.15),
+    2: Math.round(vote_count * 0.04),
+    1: Math.round(vote_count * 0.01),
   };
 
   return (
@@ -32,14 +32,14 @@ export default function RatingBreakdown({ voteAverage, voteCount }: Props) {
             />
           ))}
         </View>
-        <Text style={styles.votes}>{voteCount} ratings</Text>
+        <Text style={styles.votes}>{vote_count} ratings</Text>
       </View>
 
       <View style={styles.right}>
         {Object.entries(distribution)
           .sort(([a], [b]) => Number(b) - Number(a))
           .map(([star, count]) => {
-            const percent = voteCount ? (count / voteCount) * 100 : 0;
+            const percent = vote_count ? (count / vote_count) * 100 : 0;
             return (
               <View key={star} style={styles.row}>
                 <Text style={styles.starLabel}>{star}★</Text>

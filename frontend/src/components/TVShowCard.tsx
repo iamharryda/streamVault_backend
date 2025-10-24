@@ -4,14 +4,14 @@ import { ITvShow } from "../types/interfaces/ITvShow";
 
 export default function TVShowCard({ poster_path, name, first_air_date, id }: ITvShow) {
     return (
-        <Link href={`/tv/${id}` as any} asChild>
+        <Link href={`/tv/${id}`} asChild>
             <TouchableOpacity style={styles.container}>
                 <Image
                     source={{ uri: poster_path ? `https://image.tmdb.org/t/p/w500${poster_path}` : undefined }}
                     style={styles.image}
                 />
-                <Text style={styles.title}>{name}</Text>
-                <Text style={styles.date}>{first_air_date}</Text>
+                <Text style={styles.title}>{name || "Untitled TV Show"}</Text>
+                <Text style={styles.date}>{first_air_date ? first_air_date.slice(0, 4) : "—"}</Text>
             </TouchableOpacity>
         </Link>
     );
@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         marginTop: 8,
+        color: 'white',
     },
     date: {
         fontSize: 14,
