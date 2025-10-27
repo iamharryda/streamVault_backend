@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema(
     phoneNumber: { type: String },
     email: { type: String, unique: true , required: true },
     password: { type: String},
-    username: { type: String },
+    username: { type: String, default: '', unique: true },
     dob: { type: Date, default: null },
 
     role: {

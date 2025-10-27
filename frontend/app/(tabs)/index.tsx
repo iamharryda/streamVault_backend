@@ -6,8 +6,6 @@ import SearchButton from "@/src/components/SearchButton";
 import { IMovie } from "@/src/types/interfaces/IMovie";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { ScrollView } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomePage() {
   const router = useRouter();

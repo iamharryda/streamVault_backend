@@ -32,7 +32,7 @@ const fverification = () => {
         }
       );
       router.push({
-        pathname: "/ResetPassword",
+        pathname: "/Resetpassword",
         params: { email }, // Pass email as a search param
       });
       console.log(response);

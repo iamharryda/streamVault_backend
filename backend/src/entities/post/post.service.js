@@ -66,7 +66,7 @@ const { default: NotificationService } = await import("../notification/notificat
       }
     );
 
-    // ✅ Recalculate counts in one aggregation update
+    //  Recalculate counts in one aggregation update
     const post = await Post.findById(postId);
     post.likeCount = post.reactions.filter((r) => r.type === 'like').length;
     post.dislikeCount = post.reactions.filter(
@@ -74,17 +74,30 @@ const { default: NotificationService } = await import("../notification/notificat
     ).length;
     await post.save({ validateModifiedOnly: true });
 
+    //  Create notification (if reacting to someone else's post)
+    if (post.authorId._id.toString() !== userId.toString()) {
+      const user = await User.findById(userId).select("username name");
+      const reactionWord = type === "like" ? "liked" : "reacted to";
+      await NotificationService.createNotification({
+        receiverId: post.authorId._id,
+        senderId: userId,
+        type: "like", 
+        postId,
+        message: `${user.username || user.name} ${reactionWord} your post`,
+      });
+    }
+
     return post;
   }
 
   static async removeReaction(postId, userId) {
-    // ✅ Pull out the user's reaction directly in Mongo
+    //  Pull out the user's reaction directly in Mongo
     await Post.updateOne(
       { _id: postId },
       { $pull: { reactions: { userId: new mongoose.Types.ObjectId(userId) } } }
     );
 
-    // ✅ Recalculate counts
+    //  Recalculate counts
     const post = await Post.findById(postId);
     post.likeCount = post.reactions.filter((r) => r.type === 'like').length;
     post.dislikeCount = post.reactions.filter(
