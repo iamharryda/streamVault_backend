@@ -1,16 +1,65 @@
 import Comment from "./comment.model.js";
 import Post from "../post/post.model.js";
+import User from "../auth/auth.model.js";
+import NotificationService from "../notification/notification.service.js";
 
 class CommentService {
   static async createComment(data) {
-    const comment = new Comment(data);
+    const { postId, userId, parentCommentId, content } = data;
+
+    // Ensure user and post exist
+    const user = await User.findById(userId);
+    const post = await Post.findById(postId);
+
+    if (!user) throw new Error("User not found");
+    if (!post) throw new Error("Post not found");
+
+    // 
+    const comment = new Comment({
+      postId,
+      userId,
+      parentCommentId: parentCommentId || null,
+      content,
+    });
     await comment.save();
 
-    // increment post comment count
-    await Post.findByIdAndUpdate(data.postId, { $inc: { commentCount: 1 } });
+    // 
+    if (!parentCommentId) {
+      await Post.findByIdAndUpdate(postId, { $inc: { commentCount: 1 } });
+    }
 
-    return comment;
-  }
+
+    // CASE 1: User commented on a post → notify post author
+    if (!parentCommentId) {
+      if (post.authorId.toString() !== userId.toString()) {
+        await NotificationService.createNotification({
+          receiverId: post.authorId,
+          senderId: userId,
+          type: "comment",
+          postId,
+          commentId: comment._id,
+          message: `${user.username || user.name} commented on your post`,
+        });
+      }
+    }
+
+    // CASE 2: User replied to a comment → notify the comment’s owner
+    else {
+      const parentComment = await Comment.findById(parentCommentId);
+          if (parentComment && parentComment.userId.toString() !== userId.toString()) {
+            await NotificationService.createNotification({
+              receiverId: parentComment.userId,
+              senderId: userId,
+              type: "reply",
+              postId,
+              commentId: comment._id,
+              message: `${user.username || user.name} replied to your comment`,
+            });
+          }
+        }
+    
+        return comment;
+      }
 
   static async getCommentsByPost(postId, skip = 0, limit = 10) {
   return await Comment.find({ postId, parentCommentId: null })

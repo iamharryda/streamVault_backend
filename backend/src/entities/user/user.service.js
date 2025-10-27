@@ -3,6 +3,7 @@ import cloudinary, { cloudinaryUpload } from "../../lib/cloudinaryUpload.js";
 import User from "../auth/auth.model.js";
 import RoleType from "../../lib/types.js";
 import fs from "fs";
+import NotificationService from "../notification/notification.service.js";
 
 
 // Get all users
@@ -260,6 +261,128 @@ export const deleteMultipleAvatar = async (id) => {
 
   return updatedUser;
 };  
+
+// Follow a user
+export const followUser = async (userId, targetUserId) => {
+  if (userId.toString() === targetUserId.toString()) {
+    throw new Error("You cannot follow yourself");
+  }
+
+  const user = await User.findById(userId);
+  const targetUser = await User.findById(targetUserId);
+
+  if (!user || !targetUser) {
+    throw new Error("User not found");
+  }
+
+  // Already following?
+  if (targetUser.followers.includes(userId)) {
+    throw new Error("Already following this user");
+  }
+
+  // Update both sides
+  targetUser.followers.push(userId);
+  user.following.push(targetUserId);
+
+  await targetUser.save();
+  await user.save();
+
+  // Trigger Notification
+  await NotificationService.createNotification({
+    receiverId: targetUserId,
+    senderId: userId,
+    type: "follow",
+    message: `${user.username || user.name} started following you`,
+  });
+
+  return {
+    message: "Followed successfully",
+    user: user.toObject({
+      transform: (_, ret) => {
+        delete ret.password;
+        delete ret.__v;
+        return ret;
+      },
+    }),
+    targetUser: targetUser.toObject({
+      transform: (_, ret) => {
+        delete ret.password;
+        delete ret.__v;
+        return ret;
+      },
+    }),
+  };
+};
+
+// Unfollow a user
+export const unfollowUser = async (userId, targetUserId) => {
+  const user = await User.findById(userId);
+  const targetUser = await User.findById(targetUserId);
+
+  if (!user || !targetUser) {
+    throw new Error("User not found");
+  }
+
+  // Update both sides
+  targetUser.followers = targetUser.followers.filter(
+    (id) => id.toString() !== userId.toString()
+  );
+  user.following = user.following.filter(
+    (id) => id.toString() !== targetUserId.toString()
+  );
+
+  await targetUser.save();
+  await user.save();
+
+  return {
+    message: "Unfollowed successfully",
+    user: user.toObject({
+      transform: (_, ret) => {
+        delete ret.password;
+        delete ret.__v;
+        return ret;
+      },
+    }),
+    targetUser: targetUser.toObject({
+      transform: (_, ret) => {
+        delete ret.password;
+        delete ret.__v;
+        return ret;
+      },
+    }),
+  };
+};
+
+// Get followers
+export const getFollowers = async (userId, { page = 1, limit = 10 }) => {
+  const user = await User.findById(userId).populate(
+    "followers",
+    "username profileImage email"
+  );
+  if (!user) throw new Error("User not found");
+
+  const totalFollowers = user.followers.length;
+  const followers = user.followers.slice((page - 1) * limit, page * limit);
+
+  const paginationInfo = createPaginationInfo(page, limit, totalFollowers);
+  return { followers, paginationInfo };
+};
+
+// Get following
+export const getFollowing = async (userId, { page = 1, limit = 10 }) => {
+  const user = await User.findById(userId).populate(
+    "following",
+    "username profileImage email"
+  );
+  if (!user) throw new Error("User not found");
+
+  const totalFollowing = user.following.length;
+  const following = user.following.slice((page - 1) * limit, page * limit);
+
+  const paginationInfo = createPaginationInfo(page, limit, totalFollowing);
+  return { following, paginationInfo };
+};
+
 
 
 // Upload user PDF

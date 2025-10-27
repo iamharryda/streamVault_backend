@@ -1,10 +1,21 @@
-import mongoose from "mongoose";
-import Post from "./post.model.js";
+import mongoose from 'mongoose';
+import Post from './post.model.js';
 
 class PostService {
-  static async createPost(data) {
+  static async createPost(data, user) {
     const post = new Post(data);
-    return await post.save();
+    await post.save();
+    
+const { default: NotificationService } = await import("../notification/notification.service.js");    // Create notification after post is saved
+    await NotificationService.createNotification({
+      receiverId: post.authorId,        
+      senderId: user._id,
+      type: "post",
+      postId: post._id,
+      message: `${user.username} created a new post`,
+    });
+
+    return post; 
   }
 
   static async getAllPosts(skip = 0, limit = 20) {
@@ -12,14 +23,14 @@ class PostService {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .populate("authorId", "username email")
-      .populate("comments");
+      .populate('authorId', 'username email')
+      .populate('comments');
   }
 
   static async getPostById(postId) {
     return await Post.findById(postId)
-      .populate("authorId", "username email")
-      .populate("comments");
+      .populate('authorId', 'username email')
+      .populate('comments');
   }
 
   static async updatePost(postId, userId, updateData) {
@@ -39,38 +50,59 @@ class PostService {
   }
 
   static async addReaction(postId, userId, type) {
-    // ✅ First remove any existing reaction by this user
+    //  First remove any existing reaction by this user
     await Post.updateOne(
       { _id: postId },
       { $pull: { reactions: { userId: new mongoose.Types.ObjectId(userId) } } }
     );
 
-    // ✅ Then push the new reaction
+    // Then push the new reaction
     await Post.updateOne(
       { _id: postId },
-      { $push: { reactions: { userId: new mongoose.Types.ObjectId(userId), type } } }
+      {
+        $push: {
+          reactions: { userId: new mongoose.Types.ObjectId(userId), type }
+        }
+      }
     );
 
-    // ✅ Recalculate counts in one aggregation update
+    //  Recalculate counts in one aggregation update
     const post = await Post.findById(postId);
-    post.likeCount = post.reactions.filter((r) => r.type === "like").length;
-    post.dislikeCount = post.reactions.filter((r) => r.type === "dislike").length;
+    post.likeCount = post.reactions.filter((r) => r.type === 'like').length;
+    post.dislikeCount = post.reactions.filter(
+      (r) => r.type === 'dislike'
+    ).length;
     await post.save({ validateModifiedOnly: true });
+
+    //  Create notification (if reacting to someone else's post)
+    if (post.authorId._id.toString() !== userId.toString()) {
+      const user = await User.findById(userId).select("username name");
+      const reactionWord = type === "like" ? "liked" : "reacted to";
+      await NotificationService.createNotification({
+        receiverId: post.authorId._id,
+        senderId: userId,
+        type: "like", 
+        postId,
+        message: `${user.username || user.name} ${reactionWord} your post`,
+      });
+    }
 
     return post;
   }
 
   static async removeReaction(postId, userId) {
-    // ✅ Pull out the user's reaction directly in Mongo
+    //  Pull out the user's reaction directly in Mongo
     await Post.updateOne(
       { _id: postId },
       { $pull: { reactions: { userId: new mongoose.Types.ObjectId(userId) } } }
     );
 
-    // ✅ Recalculate counts
+    //  Recalculate counts
     const post = await Post.findById(postId);
-    post.likeCount = post.reactions.filter((r) => r.type === "like").length;
-    post.dislikeCount = post.reactions.filter((r) => r.type === "dislike").length;
+    post.likeCount = post.reactions.filter((r) => r.type === 'like').length;
+    post.dislikeCount = post.reactions.filter(
+      (r) => r.type === 'dislike'
+    ).length;
     await post.save({ validateModifiedOnly: true });
 
     return post;
