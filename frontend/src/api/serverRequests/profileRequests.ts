@@ -1,70 +1,55 @@
+// src/api/userApi.ts
 import { IUserUpdate } from "@/src/types/interfaces/iUser";
-import axios from "axios";
-import * as storage from "@/src/utils/secureStoreUtil"; 
+import authClient from "@/src/utils/authClient";
+
+const { privateReq } = authClient;
 
 const API_URL = "http://localhost:5008/api/v1/user";
 
-// Create axios instance
-const serverRequests = axios.create({
-  baseURL: API_URL,
-});
-
-// --- Attach access token automatically from storage ---
-serverRequests.interceptors.request.use(async (config) => {
-  try {
-    const accessToken = await storage.getItem("accessToken"); 
-    if (accessToken && config.headers) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-    }
-  } catch (err) {
-    console.warn("[profileRequests] failed to load access token", err);
-  }
-  return config;
-});
-
 // ------------------ API ------------------
-
 export const getUserById = async (id: string) => {
-  const response = await serverRequests.get(`/${id}`);
+  const response = await privateReq.get(`${API_URL}/${id}`);
   return response.data;
 };
 
 export const updateUser = async (id: string, data: IUserUpdate) => {
   try {
-    const response = await serverRequests.put(`/${id}`, data);
-    return response.statusText;
+    const response = await privateReq.put(`${API_URL}/${id}`, data);
+    return response.data
   } catch (error) {
-    console.warn("[updateUser] failed", error);
-    return error || "Error";
+    console.error("updateUser error:", error);
+    throw error;
   }
 };
 
-export const uploadAvatar = async (id: string, avatar: string) => {
+export const uploadAvatar = async (userId: string, formData: FormData) => {
   try {
-    const response = await serverRequests.post(`/upload-avatar/${id}`, avatar);
-    return response.statusText;
+    const response = await privateReq.post(`${API_URL}/upload-avatar/${userId}`, formData);
+    return response.data.profileImage;
   } catch (error) {
-    console.warn("[uploadAvatar] failed", error);
-    return error || "Error";
+    console.error("updateAvatar error:", error);
+    throw error;
   }
 };
 
-export const updateAvatar = async (id: string, avatar: string) => {
+export const updateAvatar = async (id: string, formData: FormData) => {
   try {
-    const response = await serverRequests.put(`/upload-avatar/${id}`, avatar);
-    return response.statusText;
+    const response = await privateReq.put(`${API_URL}/upload-avatar/${id}`, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return response.data;
   } catch (error) {
-    console.warn("[updateAvatar] failed", error);
-    return error || "Error";
+    console.error("updateAvatar error:", error);
+    throw error;
   }
 };
 
 export const deleteAvatar = async (id: string) => {
   try {
-    const response = await serverRequests.delete(`/upload-avatar/${id}`);
-    return response.statusText;
+    const response = await privateReq.delete(`${API_URL}/upload-avatar/${id}`);
+    return response.data
   } catch (error) {
-    console.warn("[deleteAvatar] failed", error);
-    return error || "Error";
+    console.error("deleteAvatar error:", error);
+    throw error;
   }
 };

@@ -11,14 +11,15 @@ import {
   StatusBar,
   ActivityIndicator,
   Alert,
+  ScrollView,
 } from "react-native";
 import { Ionicons, MaterialCommunityIcons, Feather } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import axios from "axios";
-import { IUser } from "@/src/types/interfaces/iUser";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/src/store/store";
 import { useRouter } from "expo-router";
+import { uploadAvatar } from "@/src/api/serverRequests/profileRequests";
+import { setUser } from "@/src/store/slices/userSlice";
 
 // Icons for user stats
 const STAT_ICONS = {
@@ -84,27 +85,20 @@ export default function AccountScreen() {
   const [loading, setLoading] = useState(true);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [profile, setProfile] = useState<IUser | null>(null);
   const router = useRouter();
 
   // Get user state from Redux
   const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
 
   const fetchProfileData = async () => {
     setLoading(true);
     try {
-      if (!user) {
-        setError('No user in store yet');
+      if (!user || !user.id) {
+        setError("No user in store yet");
         return;
       }
-      setProfile({
-        id: user.id ?? null,
-        name: user.name ?? '',
-        username: user.username ?? '',
-        avatar: user.avatar ?? null,
-        userStats: { ratings: 0, reviews: 0, watchlist: 0, favorites: 0 },
-        isLogined: true,
-      });
+      setError(null);
     } finally {
       setLoading(false);
     }
@@ -131,8 +125,8 @@ export default function AccountScreen() {
         quality: 0.8,
       });
 
-      if (!result.canceled && result.assets[0]) {
-        await uploadAvatar(result.assets[0].uri);
+      if (!result.canceled && result.assets[0] && user.id) {
+        await uploadAvatarHandler(result.assets[0].uri);
       }
     } catch (error) {
       console.error("Error selecting image:", error);
@@ -141,44 +135,31 @@ export default function AccountScreen() {
   };
 
   // Upload avatar to the server
-  const uploadAvatar = async (imageUri: string) => {
+  const uploadAvatarHandler = async (imageUri: string) => {
+    if (!user.id) return;
+
     try {
       setUploadingAvatar(true);
 
+      // Create FormData for web
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+      const file = new File([blob], "avatar.jpg", { type: "image/jpeg" });
+
       const formData = new FormData();
-      formData.append("avatar", {
-        uri: imageUri,
-        type: "image/jpeg",
-        name: "avatar.jpg",
-      } as unknown as Blob);
+      formData.append("profileImage", file);
 
-      const response = await axios.post(
-        "base_url/user/upload-avatar",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      // Send to server
+      const res = await uploadAvatar(user.id, formData);
+      const newAvatarUrl = res || imageUri;
 
-      if (profile) {
-        setProfile({
-          ...profile,
-          avatar: response.data.avatarUrl || imageUri,
-        });
-      }
+      // Update Redux
+      dispatch(setUser({ ...user, avatar: newAvatarUrl }));
+
+      Alert.alert("Avatar uploaded", "Your avatar has been successfully updated!");
     } catch (error) {
       console.error("Error uploading avatar:", error);
-
-      if (profile) {
-        setProfile({
-          ...profile,
-          avatar: imageUri,
-        });
-      }
-
-      Alert.alert("Avatar Updated", "Avatar updated locally (demo mode)");
+      Alert.alert("Error", "Failed to upload avatar");
     } finally {
       setUploadingAvatar(false);
     }
@@ -193,21 +174,13 @@ export default function AccountScreen() {
   };
 
   // Transform stats object into array for rendering
-  const statsArray: Stat[] = profile
+  const statsArray: Stat[] = user.isLogined
     ? [
-      { key: "ratings", label: "Ratings", value: profile.userStats.ratings },
-      { key: "reviews", label: "Reviews", value: profile.userStats.reviews },
-      {
-        key: "watchlist",
-        label: "Watchlist",
-        value: profile.userStats.watchlist,
-      },
-      {
-        key: "favorites",
-        label: "Favorites",
-        value: profile.userStats.favorites,
-      },
-    ]
+        { key: "ratings", label: "Ratings", value: user.userStats.ratings },
+        { key: "reviews", label: "Reviews", value: user.userStats.reviews },
+        { key: "watchlist", label: "Watchlist", value: user.userStats.watchlist },
+        { key: "favorites", label: "Favorites", value: user.userStats.favorites },
+      ]
     : [];
 
   // If user is not logged in → show login/register UI
@@ -242,101 +215,87 @@ export default function AccountScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <StatusBar barStyle="light-content" />
+      <ScrollView>
+        {/* Top header area */}
+        <View style={styles.header}>
+          <TouchableOpacity style={styles.backBtn} activeOpacity={0.7}>
+            <Ionicons name="arrow-back" size={22} color="#BFDCDC" />
+          </TouchableOpacity>
 
-      {/* Top header area */}
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backBtn} activeOpacity={0.7}>
-          <Ionicons name="arrow-back" size={22} color="#BFDCDC" />
-        </TouchableOpacity>
-
-        {loading ? (
-          <SkeletonLoader />
-        ) : error ? (
-          <ErrorState onRetry={handleRetry} />
-        ) : profile ? (
-          <>
-            <View style={styles.avatarWrap}>
-              <Image
-                source={{ uri: profile.avatar || " " }}
-                style={styles.avatar}
-              />
-              <TouchableOpacity
-                style={styles.addIcon}
-                activeOpacity={0.8}
-                onPress={handleAvatarPress}
-                disabled={uploadingAvatar}
-              >
-                {uploadingAvatar ? (
-                  <ActivityIndicator size={12} color="#052426" />
-                ) : (
-                  <Feather name="plus" size={12} color="#052426" />
-                )}
-              </TouchableOpacity>
-            </View>
-
-            <Text style={styles.name}>{profile.name}</Text>
-            <Text style={styles.username}>{profile.username}</Text>
-
-            <View style={styles.actionRow}>
-              <TouchableOpacity style={styles.outlineBtn} activeOpacity={0.8}>
-                <Text style={styles.outlineBtnText}>Edit profile</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.outlineBtn} activeOpacity={0.8}>
-                <Text style={styles.outlineBtnText}>Share profile</Text>
-              </TouchableOpacity>
-            </View>
-          </>
-        ) : null}
-      </View>
-
-      {/* Stats cards */}
-      {!loading && !error && profile?.userStats && (
-        <View style={styles.statsContainer}>
-          {statsArray.map((s) => (
-            <TouchableOpacity
-              key={s.key}
-              style={styles.statCard}
-              activeOpacity={0.8}
-            >
-              <View style={styles.statIconWrap}>
+          {loading ? (
+            <SkeletonLoader />
+          ) : error ? (
+            <ErrorState onRetry={handleRetry} />
+          ) : (
+            <>
+              <View style={styles.avatarWrap}>
                 <Image
-                  source={STAT_ICONS[s.key]}
-                  style={styles.statIconImage}
+                  source={{ uri: user.avatar || "" }}
+                  style={styles.avatar}
                 />
+                <TouchableOpacity
+                  style={styles.addIcon}
+                  activeOpacity={0.8}
+                  onPress={handleAvatarPress}
+                  disabled={uploadingAvatar}
+                >
+                  {uploadingAvatar ? (
+                    <ActivityIndicator size={12} color="#052426" />
+                  ) : (
+                    <Feather name="plus" size={12} color="#052426" />
+                  )}
+                </TouchableOpacity>
               </View>
-              <Text style={styles.statValue}>{s.value}</Text>
-              <Text style={styles.statLabel}>{s.label}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      )}
 
-      {/* Menu list */}
-      {!loading && !error && (
-        <FlatList
-          data={MENU}
-          keyExtractor={(i) => i.key}
-          contentContainerStyle={styles.menuList}
-          renderItem={({ item }) => (
-            <TouchableOpacity style={styles.menuItem} activeOpacity={0.7}>
-              <View style={styles.menuLeft}>
-                <MaterialCommunityIcons
-                  name={item.icon as any}
-                  size={18}
-                  color="#9FBDB9"
-                />
-                <Text style={styles.menuLabel}>{item.label}</Text>
+              <Text style={styles.name}>{user.name}</Text>
+              <Text style={styles.username}>{user.username}</Text>
+
+              <View style={styles.actionRow}>
+                <TouchableOpacity style={styles.outlineBtn} activeOpacity={0.8}>
+                  <Text style={styles.outlineBtnText}>Edit profile</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.outlineBtn} activeOpacity={0.8}>
+                  <Text style={styles.outlineBtnText}>Share profile</Text>
+                </TouchableOpacity>
               </View>
-              <Ionicons
-                name="chevron-forward"
-                size={20}
-                color="#123"
-                style={styles.chev}
-              />
-            </TouchableOpacity>
+            </>
           )}
-        />
-      )}
+        </View>
+
+        {/* Stats cards */}
+        {!loading && !error && (
+          <View style={styles.statsContainer}>
+            {statsArray.map((s) => (
+              <TouchableOpacity key={s.key} style={styles.statCard} activeOpacity={0.8}>
+                <View style={styles.statIconWrap}>
+                  <Image source={STAT_ICONS[s.key]} style={styles.statIconImage} />
+                </View>
+                <Text style={styles.statValue}>{s.value}</Text>
+                <Text style={styles.statLabel}>{s.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+
+        {/* Menu list */}
+        {!loading && !error && (
+          <View style={styles.menuList}>
+            {MENU.map((item) => (
+              <TouchableOpacity key={item.key} style={styles.menuItem} activeOpacity={0.7}>
+                <View style={styles.menuLeft}>
+                  <MaterialCommunityIcons
+                    name={item.icon as any}
+                    size={18}
+                    color="#9FBDB9"
+                  />
+                  <Text style={styles.menuLabel}>{item.label}</Text>
+                </View>
+                <Ionicons name="chevron-forward" size={20} color="#123" style={styles.chev} />
+              </TouchableOpacity>
+            ))}
+          </View>
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 }
