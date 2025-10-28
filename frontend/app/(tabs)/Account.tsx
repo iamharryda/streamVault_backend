@@ -88,41 +88,28 @@ export default function AccountScreen() {
   const router = useRouter();
 
   // Get user state from Redux
-    const isLogined = useSelector((state: RootState) => state.user.isLogined);
+  const user = useSelector((state: RootState) => state.user);
 
-
-  // Fetch user profile from API
   const fetchProfileData = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      setError(null);
-
-      const profileResponse = await axios.get<IUser>(
-        "http://10.0.2.2:5000/api/user/profile"
-      );
-      setProfile(profileResponse.data);
-    } catch (err) {
-      console.error("Error fetching profile data:", err);
-
-      // Demo fallback
+      if (!user) {
+        setError('No user in store yet');
+        return;
+      }
       setProfile({
-        id: null,
-        name: "Jane Doe",
-        username: "@jane_doe",
-        avatar: "https://i.pravatar.cc/300",
-        userStats: {
-          ratings: 224,
-          reviews: 156,
-          watchlist: 89,
-          favorites: 67,
-        },
+        id: user.id ?? null,
+        name: user.name ?? '',
+        username: user.username ?? '',
+        avatar: user.avatar ?? null,
+        userStats: { ratings: 0, reviews: 0, watchlist: 0, favorites: 0 },
         isLogined: true,
       });
     } finally {
-      setTimeout(() => setLoading(false), 0);
+      setLoading(false);
     }
   };
-console.log(isLogined)
+
   // Pick image from gallery and upload as avatar
   const handleAvatarPress = async () => {
     try {
@@ -208,29 +195,29 @@ console.log(isLogined)
   // Transform stats object into array for rendering
   const statsArray: Stat[] = profile
     ? [
-        { key: "ratings", label: "Ratings", value: profile.userStats.ratings },
-        { key: "reviews", label: "Reviews", value: profile.userStats.reviews },
-        {
-          key: "watchlist",
-          label: "Watchlist",
-          value: profile.userStats.watchlist,
-        },
-        {
-          key: "favorites",
-          label: "Favorites",
-          value: profile.userStats.favorites,
-        },
-      ]
+      { key: "ratings", label: "Ratings", value: profile.userStats.ratings },
+      { key: "reviews", label: "Reviews", value: profile.userStats.reviews },
+      {
+        key: "watchlist",
+        label: "Watchlist",
+        value: profile.userStats.watchlist,
+      },
+      {
+        key: "favorites",
+        label: "Favorites",
+        value: profile.userStats.favorites,
+      },
+    ]
     : [];
 
   // If user is not logged in → show login/register UI
-  if (!isLogined) {
+  if (!user.isLogined) {
     return (
       <SafeAreaView style={styles.safe}>
         <View style={styles.centerContainer}>
           <TouchableOpacity
             style={styles.fullWidthBtn}
-            onPress={() => router.push("/Login")} 
+            onPress={() => router.push("/Login")}
           >
             <Text style={styles.fullWidthBtnText}>Login</Text>
           </TouchableOpacity>

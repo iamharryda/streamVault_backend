@@ -21,8 +21,10 @@ const userSlice = createSlice({
   reducers: {
     // Set the user state with partial data
     setUser: (state, action: PayloadAction<Partial<IUser>>) => {
+      if (!action.payload) return;
       Object.assign(state, action.payload);
     },
+
 
     // Update a specific field of the user
     updateUserField: <K extends keyof IUser>(
