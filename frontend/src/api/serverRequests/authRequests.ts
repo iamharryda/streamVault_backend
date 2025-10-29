@@ -1,29 +1,8 @@
 import { setUser } from "@/src/store/slices/userSlice";
 import { store } from "@/src/store/store";
-import axios from "axios";
-import * as SecureStore from "expo-secure-store";
 import * as storage from "@/src/utils/secureStoreUtil";
-
-const API_URL = "http://localhost:5008/api/v1/auth";
-// Public instance: no Authorization header added automatically
-const publicAuthRequests = axios.create({
-  baseURL: API_URL,
-});
-
-// Private instance: interceptor will add access token from SecureStore
-const privateAuthRequests = axios.create({
-  baseURL: API_URL,
-});
-
-privateAuthRequests.interceptors.request.use(async (config) => {
-  const accessToken = await SecureStore.getItemAsync("accessToken");
-  if (accessToken && config.headers) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
-  }
-  return config;
-});
-
-// ------------------ API FUNCTIONS ------------------
+import { publicReq, privateReq } from "@/src/utils/authClient";
+import { getUserById } from "./profileRequests";
 
 // Public endpoints (no token required)
 export const registerInit = async (
@@ -33,7 +12,7 @@ export const registerInit = async (
   phoneNumber: string
 ) => {
   try {
-    const response = await publicAuthRequests.post("/register/init", {
+    const response = await publicReq.post("/register/init", {
       name,
       email,
       password,
@@ -47,7 +26,7 @@ export const registerInit = async (
 
 export const verifyOtp = async (email: string, otp: string) => {
   try {
-    const response = await publicAuthRequests.post("/register/verify", {
+    const response = await publicReq.post("/register/verify", {
       email,
       otp,
     });
@@ -57,51 +36,57 @@ export const verifyOtp = async (email: string, otp: string) => {
   }
 };
 
+// Login: store tokens using storage wrapper and update redux user slice
 export const login = async (email: string, password: string) => {
   try {
-    const response = await publicAuthRequests.post("/login", {
+    const response = await publicReq.post("/login", {
       email,
       password,
     });
-    const loginData = response.data?.data;
+
+    const loginData = response.data?.data ?? response.data;
 
     if (!loginData) {
       throw new Error("Login response missing data");
     }
 
-    // Save tokens using platform-appropriate storage wrapper (localStorage on web, SecureStore on native)
+    // Save tokens using storage wrapper (SecureStore/localStorage)
     if (loginData.accessToken) {
       await storage.setItem("accessToken", loginData.accessToken);
     }
     if (loginData.user?.refreshToken) {
       await storage.setItem("refreshToken", loginData.user.refreshToken);
     }
-
-    // update redux store for immediate UI updates
+    const userData = await getUserById(loginData.user._id)
+    // update redux store
     store.dispatch(
       setUser({
-        id: loginData.user.id,
-        name: loginData.user.name,
-        username: loginData.user.username,
-        avatar: loginData.user.avatar,
-        userStats: loginData.user.userStats,
+        id: userData.data._id ?? null,
+        name: userData.data.name ?? "User",
+        username:
+          userData.data.username ??
+          (userData.data.email ? userData.data.email.split("@")[0] : "guest"),
+        avatar: userData.data.profileImage ?? null,
+        userStats:
+          userData.data.userStats ?? { ratings: 0, reviews: 0, watchlist: 0, favorites: 0 },
         isLogined: true,
       })
     );
 
     return loginData;
   } catch (err: any) {
-    // normalize error
     throw err?.response?.data ?? err?.message ?? err;
   }
 };
 
-// Protected endpoints (use private instance with interceptor)
+// Protected endpoint example uses privateReq (which will handle token injection and refresh)
 export const getCurrentUser = async () => {
   try {
-    const response = await privateAuthRequests.get("/me");
+    const response = await privateReq.get("/me");
     return response.data;
   } catch (err: any) {
     throw err.response?.data || err.message;
   }
 };
+
+export { publicReq as publicAuthRequests, privateReq as privateAuthRequests };
