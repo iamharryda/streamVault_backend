@@ -41,86 +41,100 @@ export default function MovieDetails() {
         )
     }
 
-  return (
-    <ScrollView style={styles.container}>
-        {/* Movie Poster */}
-        <View style={styles.header}>
-            <Image 
-                source={{
-                    uri: movie.poster_path
-                        ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
-                        : 'https://via.placeholder.com/500x750?text=No+Image',
-                }}
-                style={styles.poster}
-                resizeMode="cover"
-            />
-            <LinearGradient
-                colors={["rgba(13, 40, 47, 0.8)", "#04191E"]}
-                end={{ x: 0, y: 0.2 }}
-                style={styles.posterGradient}
-            />
-        </View>
-
-        {/* Movie Details */}
-        <View style={styles.content}>
-            <Text style={styles.title}>{movie.title}</Text>
-            <Text style={styles.meta}>
-                {movie.release_date?.split("-")[0]} • 
-                {movie.genres?.map((g: any) => g.name).join(", ")} •
-                {movie.runtime} min
-            </Text>
-
-            <View style={{ flexDirection: 'row', marginBottom: 16 }}>
-                <TouchableOpacity style={styles.actionBtn}>
-                    <Ionicons name="heart-outline" size={24} color="#FFF" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.actionBtn}>
-                    <Ionicons name="star-outline" size={24} color="#FFF" />
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.watchNow}>
-                    <Text style={{ color: '#04191E', fontWeight: 'bold' }}>Watch Now</Text>
-                </TouchableOpacity>
+    return (
+        <ScrollView style={styles.container}>
+            {/* Movie Poster */}
+            <View style={styles.header}>
+                <Image
+                    source={{
+                        uri: movie.poster_path
+                            ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
+                            : 'https://via.placeholder.com/500x750?text=No+Image',
+                    }}
+                    style={styles.poster}
+                    resizeMode="cover"
+                />
+                <LinearGradient
+                    colors={["rgba(0, 0, 0, 0)", "rgba(4, 25, 30, 1)"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 0, y: 0.95 }}
+                    style={styles.posterGradient}
+                />
             </View>
 
-            <View>
-                <Text style={styles.title}>Summary</Text>
-                <Text style={styles.overview}>{movie.overview}</Text>
-            </View>
-
-            {movie.credits?.cast?.length > 0 && (
-                <>
-                    <Text style={styles.title}>Top Cast</Text>
-                    <FlatList 
-                        data={movie.credits.cast.slice(0, 10)}
-                        keyExtractor={(item) => item.id.toString()}
-                        horizontal={true}
-                        showsHorizontalScrollIndicator={false}
-                        renderItem={({ item }) => (
-                            <View style={styles.castItem}>
-                                <Image
-                                    source={{
-                                        uri: item.profile_path
-                                            ? `https://image.tmdb.org/t/p/w200${item.profile_path}`
-                                            : 'https://via.placeholder.com/200x300?text=No+Image',
-                                    }}
-                                    style={styles.castImage}
-                                />
-                                <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 }}>{item.name}</Text>
-                                <Text style={{ color: '#aaa', fontSize: 12 }}>{item.character}</Text>
-                            </View>
-                        )}
+            {/* Movie Details */}
+            <View style={styles.content}>
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+                    <Image
+                        source={{
+                            uri: movie.poster_path
+                                ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
+                                : 'https://via.placeholder.com/200x300?text=No+Image',
+                        }}
+                        style={{ width: 120, height: 180, borderRadius: 8, marginBottom: 16 }}
                     />
-                </>
-            )}
+                    <View style={{ flexDirection: 'column', marginLeft: 16, flex: 1, justifyContent: 'flex-end' }}>
+                        <Text style={styles.title}>{movie.title}</Text>
+                        <Text style={styles.meta}>
+                            {movie.release_date?.split("-")[0]} •
+                            {movie.genres?.map((g: any) => g.name).join(", ")} •
+                            {movie.runtime} min
+                        </Text>
+                    </View>
+                </View>
 
-            <RatingBreakdown
-                voteAverage={movie.vote_average}
-                voteCount={movie.vote_count}
-            />
-        </View>
 
-    </ScrollView>
-  )
+                <View style={{ flexDirection: 'row', marginBottom: 16 }}>
+                    <TouchableOpacity style={styles.actionBtn}>
+                        <Ionicons name="heart-outline" size={24} color="#FFF" />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.actionBtn}>
+                        <Ionicons name="star-outline" size={24} color="#FFF" />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.watchNow}>
+                        <Text style={{ color: '#04191eff', fontWeight: 'bold' }}>Watch Now</Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View>
+                    <Text style={styles.title}>Summary</Text>
+                    <Text style={styles.overview}>{movie.overview}</Text>
+                </View>
+
+                {movie.credits?.cast?.length > 0 && (
+                    <>
+                        <Text style={styles.title}>Top Cast</Text>
+                        <FlatList
+                            data={movie.credits.cast.slice(0, 10)}
+                            keyExtractor={(item) => item.id.toString()}
+                            horizontal={true}
+                            showsHorizontalScrollIndicator={false}
+                            renderItem={({ item }) => (
+                                <View style={styles.castItem}>
+                                    <Image
+                                        source={{
+                                            uri: item.profile_path
+                                                ? `https://image.tmdb.org/t/p/w200${item.profile_path}`
+                                                : 'https://via.placeholder.com/200x300?text=No+Image',
+                                        }}
+                                        style={styles.castImage}
+                                    />
+                                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 14 }}>{item.name}</Text>
+                                    <Text style={{ color: '#aaa', fontSize: 12 }}>{item.character}</Text>
+                                </View>
+                            )}
+                        />
+                    </>
+                )}
+
+                <RatingBreakdown
+                    vote_average={movie.vote_average}
+                    vote_count={movie.vote_count}
+                />
+            </View>
+
+        </ScrollView>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -136,12 +150,11 @@ const styles = StyleSheet.create({
     },
     header: {
         width: "100%",
-        height: 300,
+        height: '60%',
         position: "relative",
     },
     poster: {
-        width: "100%",
-        height: "100%",
+        flex: 1,
     },
     posterGradient: {
         ...StyleSheet.absoluteFillObject,
@@ -158,7 +171,7 @@ const styles = StyleSheet.create({
     },
     content: {
         padding: 16,
-        marginTop: -60,
+        marginTop: -130,
     },
     actionBtn: {
         backgroundColor: "#1b263b",
@@ -178,7 +191,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         lineHeight: 22,
     },
-        castItem: {
+    castItem: {
         alignItems: "center",
         marginRight: 16,
         width: 100,
