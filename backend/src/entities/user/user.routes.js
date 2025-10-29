@@ -3,7 +3,11 @@ import {
      getAllUsersController, getAllAdminsController, getAllSelleresController, getUserByIdController,updateUserController, deleteUserController, 
      createAvatarController,updateAvatarProfileController,deleteAvatarController,
      createMultipleAvatarController,updateMultipleAvatarController,deleteMultipleAvatarController,
-     createUserPDFController,updateUserPDFController,deleteUserPDFController
+     createUserPDFController,updateUserPDFController,deleteUserPDFController,
+     followUserController,
+     unfollowUserController,
+     getFollowersController,
+     getFollowingController
     } from "./user.controller.js";
 import { adminMiddleware,  verifyToken } from "../../core/middlewares/authMiddleware.js";
 import express from "express";
@@ -31,6 +35,12 @@ router.delete("/upload-avatar/:id", verifyToken, deleteAvatarController);
 router.post("/upload-multiple-avatar/:id", verifyToken, multerUpload([{ name: "multiProfileImage", maxCount: 5 },]), createMultipleAvatarController);
 router.put("/upload-multiple-avatar/:id", verifyToken, multerUpload([{ name: "multiProfileImage", maxCount: 5 },]), updateMultipleAvatarController);
 router.delete("/upload-multiple-avatar/:id", verifyToken,deleteMultipleAvatarController);
+
+// follow system
+router.post("/:targetUserId/follow", verifyToken, followUserController);
+router.post("/:targetUserId/unfollow", verifyToken, unfollowUserController);
+router.get("/:userId/followers", getFollowersController);
+router.get("/:userId/following", getFollowingController);
 
 // file upload
 router.post("/upload-file/:id", verifyToken, multerUpload([{ name: "userPDF", maxCount: 1 },]),createUserPDFController);

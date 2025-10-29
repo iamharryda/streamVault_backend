@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema(
     phoneNumber: { type: String },
     email: { type: String, unique: true , required: true },
     password: { type: String},
-    username: { type: String },
+    username: { type: String, default: '', unique: true },
     dob: { type: Date, default: null },
 
     role: {
@@ -49,8 +49,9 @@ const UserSchema = new mongoose.Schema(
       type: String,
       default: ''
     },
-    hasActiveSubscription: { type: Boolean, default: false },
-    subscriptionExpireDate: { type: Date, default: null },
+    followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+    
     blockedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     language: { type: String, default: 'en' }
   },

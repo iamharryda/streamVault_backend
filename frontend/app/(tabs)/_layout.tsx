@@ -14,6 +14,8 @@ import { ActivityIndicator, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { SpecialTabButton } from "@/src/components/SpecialTabButton";
 import type { EventArg } from "@react-navigation/native";
+import { Provider } from "react-redux";
+import { store } from "@/src/store/store";
 
 export default function Layout() {
   const [interLoaded] = loadInterFonts({
@@ -31,6 +33,7 @@ export default function Layout() {
 
   if (!fontsLoaded) {
     return (
+      <Provider store={store}>
       <View
         style={{
           flex: 1,
@@ -41,10 +44,12 @@ export default function Layout() {
       >
         <ActivityIndicator size="large" color={"#FACC15"} />
       </View>
+      </Provider>
     );
   }
 
   return (
+    <Provider store={store}>
     <Tabs
       screenOptions={{
         headerShown: false,
@@ -104,5 +109,6 @@ export default function Layout() {
       />
       <Tabs.Screen name="SearchScreen" options={{ href: null }} />
     </Tabs>
+    </Provider>
   );
 }

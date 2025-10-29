@@ -16,7 +16,11 @@ import {
   
   createUserPDF,
   updateUserPDF,
-  deleteUserPDF
+  deleteUserPDF,
+  followUser,
+  unfollowUser,
+  getFollowers,
+  getFollowing
 
 } from "./user.service.js";
 
@@ -160,6 +164,42 @@ export const deleteMultipleAvatarController = async (req, res) => {
     generateResponse(res, 200, true, 'Multiple avatars deleted successfully', user);
   } catch (error) {
     generateResponse(res, 500, false, 'Failed to delete multiple avatars', null);
+  }
+};
+
+export const followUserController = async (req, res) => {
+  try {
+    const result = await followUser(req.user._id, req.params.targetUserId);
+    generateResponse(res, 200, true, "Follow successful", result);
+  } catch (err) {
+    generateResponse(res, 400, false, err.message, null);
+  }
+};
+
+export const unfollowUserController = async (req, res) => {
+  try {
+    const result = await unfollowUser(req.user._id, req.params.targetUserId);
+    generateResponse(res, 200, true, "Unfollow successful", result);
+  } catch (err) {
+    generateResponse(res, 400, false, err.message, null);
+  }
+};
+
+export const getFollowersController = async (req, res) => {
+  try {
+    const result = await getFollowers(req.params.userId, req.query);
+    generateResponse(res, 200, true, "Followers fetched", result);
+  } catch (err) {
+    generateResponse(res, 400, false, err.message, null);
+  }
+};
+
+export const getFollowingController = async (req, res) => {
+  try {
+    const result = await getFollowing(req.params.userId, req.query);
+    generateResponse(res, 200, true, "Following fetched", result);
+  } catch (err) {
+    generateResponse(res, 400, false, err.message, null);
   }
 };
 
